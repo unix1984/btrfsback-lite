@@ -214,7 +214,9 @@ Services include:
 
 For business inquiries and quotes, please contact:
 ```
-Matyi Szabolcs
+**Matyi Szabolcs**
+Linux System Engineer
+
 unixit.mail@gmail.com
 ```
 <br></br>
