@@ -14,6 +14,10 @@ Lightweight BTRFS snapshot and replication toolkit written in pure Bash
 </p>
 
 ---
+<img src="img/1.png" width="600">
+<img src="img/2.png" width="600">
+<img src="img/3.png" width="600">
+<img src="img/4.png" width="600">
 
 ## Overview
 
@@ -30,10 +34,7 @@ Typical use cases:
 - Multi-volume backup orchestration
 
 ---
-<img src="img/1.png" width="600">
-<img src="img/2.png" width="600">
-<img src="img/3.png" width="600">
-<img src="img/4.png" width="600">
+
 ## Features
 
 | Feature | Description |
