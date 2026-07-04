@@ -69,10 +69,14 @@ apt install -y coreutils tree bsd-mailx postfix pv gawk
 - Pre-created destination directories
 
 
+
+
 Installation
 ```
 wget -O /usr/local/sbin/btrfsback-lite https://raw.githubusercontent.com/unix1984/btrfsback-lite/main/btrfsback-lite && wget -O /usr/local/sbin/autosnaps-btrfsback-lite.sh https://raw.githubusercontent.com/unix1984/btrfsback-lite/refs/heads/main/autosnaps-btrfsback-lite.sh && wget -O /etc/btrfsback-lite.cfg https://raw.githubusercontent.com/unix1984/btrfsback-lite/main/btrfsback-lite.cfg && chmod +x /usr/local/sbin/btrfsback-lite /usr/local/sbin/autosnaps-btrfsback-lite.sh
 ```
+
+
 
 
 CLI Reference
@@ -93,10 +97,14 @@ Usage:
 ```
 
 
+
+
 Manual Usage
 ```
 btrfsback-lite --subvol / --local-dir /mnt/sda2/autosnap-test --daily-local 4 --remote-host 10.5.5.4 --remote-dir /mnt/sdb2/BACKUP/VPS-rootfs/autosnap-test --daily-remote 6
 ```
+
+
 
 
 Cron Example
@@ -114,6 +122,8 @@ Cron Example
 ```
 
 
+
+
 Central Configuration
 You can backup containers individually using the following commands:
 ```
@@ -121,6 +131,8 @@ You can backup containers individually using the following commands:
 /usr/local/sbin/btrfsback-lite --subvol /mnt/sda3/containers/container2 --local-dir /mnt/sda3/autosnap/container2 --daily-local 10 --remote-host 10.5.5.4 --remote-dir /backup/container2 --daily-remote 15
 /usr/local/sbin/btrfsback-lite --subvol /mnt/sda3/containers/container3 --local-dir /mnt/sda3/autosnap/container3 --daily-local 10 --remote-host 10.5.5.4 --remote-dir /backup/container3 --daily-remote 15
 ```
+
+
 
 
 
