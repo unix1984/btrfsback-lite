@@ -133,11 +133,12 @@ DAILY_RSNAP_LXD="7"
 DAILY_EMAIL="info@unixit.org"
 ```
 
-Email delivery notice
+### Email delivery notice
 
 The first email report may occasionally be delivered to the Spam / Junk folder depending on the recipient’s mail provider.
 
 If this happens, please mark the email as “Not spam” or move it to the inbox. This helps improve future delivery and ensures subsequent reports arrive correctly in the inbox.
+
 <br></br>
 ### Cron Example
 ```
