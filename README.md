@@ -45,6 +45,12 @@ Typical use cases:
 | Monitoring ready | Hooks for Nagios / Zabbix |
 
 ---
+Prerequisites
+- BTRFS filesystem
+- btrfs-progs installed
+- Passwordless SSH access to backup host
+- Pre-created destination directories
+<br></br>
 
 ## Requirements
 
@@ -61,12 +67,6 @@ Run as root (sudo su - / sudo -i):
 apt update
 apt install -y coreutils tree bsd-mailx postfix pv gawk
 ```
-
-- Prerequisites
-- BTRFS filesystem
-- btrfs-progs installed
-- Passwordless SSH access to backup host
-- Pre-created destination directories
 
 <br></br>
 Installation - btrfsback-lite
