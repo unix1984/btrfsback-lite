@@ -75,46 +75,42 @@ wget -O /usr/local/sbin/btrfsback-lite https://raw.githubusercontent.com/unix198
 
 CLI Reference
 ```
--s, --subvol         Source BTRFS subvolume
--l, --local-dir      Local snapshot directory
--d, --daily-local    Number of local snapshots to keep
--H, --remote-host    Remote backup host (IP/FQDN)
--r, --remote-dir     Remote snapshot directory
--D, --daily-remote   Number of remote snapshots to keep
--h, --help           Show help
+$ btrfsback-lite -h
+=================================================================================
+BTRFS snapshot and replication script - btrfsback-lite
+=================================================================================
+
+Usage:
+    -s, --subvol        Selected BTRFS subvolume for snapshot
+    -l, --local-dir     Location of snapshots
+    -d, --snap-local    Number of local daily snapshots to keep
+    -H, --remote-host   Remote Host IP Address
+    -r, --remote-dir    Remote location of snapshots
+    -D, --snap-remote   Number of remote daily snapshots to keep
+    -h, --help          This help message
 ```
 
 Manual Usage
 ```
-btrfsback-lite \
-  --subvol / \
-  --local-dir /mnt/sda2/autosnap-test \
-  --daily-local 4 \
-  --remote-host 10.5.5.4 \
-  --remote-dir /mnt/sdb2/BACKUP/VPS-rootfs/autosnap-test \
-  --daily-remote 6
-```
-Cron Example
-```
-0 23 * * * root /usr/local/sbin/btrfsback-lite \
---subvol / \
---local-dir /mnt/sda2/autosnap-test \
---daily-local 4 \
---remote-host 10.5.5.4 \
---remote-dir /mnt/sdb2/BACKUP/VPS-rootfs/autosnap-test \
---daily-remote 6 \
-> /var/log/btrfsback-lite.log 2>&1
+btrfsback-lite --subvol / --local-dir /mnt/sda2/autosnap-test --daily-local 4 --remote-host 10.5.5.4 --remote-dir /mnt/sdb2/BACKUP/VPS-rootfs/autosnap-test --daily-remote 6
 ```
 
-Multi-Volume Orchestration
+Cron Example
 ```
+# BTRFS autosnap and replication scheduling.
+# DAILY snapshot - every day at 01:00
 0 1 * * * root /usr/local/sbin/autosnaps-btrfsback-lite.sh --config /etc/btrfsback-lite.cfg DAILY
+# WEEKLY snapshot - every Sunday at 03:00
 0 3 * * 0 root /usr/local/sbin/autosnaps-btrfsback-lite.sh --config /etc/btrfsback-lite.cfg WEEKLY
+# MONTHLY snapshot - 1st day of each month at 04:00
 0 4 1 * * root /usr/local/sbin/autosnaps-btrfsback-lite.sh --config /etc/btrfsback-lite.cfg MONTHLY
+# YEARLY snapshot - January 1st at 05:00
 0 5 1 1 * root /usr/local/sbin/autosnaps-btrfsback-lite.sh --config /etc/btrfsback-lite.cfg YEARLY
+
 ```
 
 Central Configuration
+You can backup containers individually using the following commands:
 ```
 /usr/local/sbin/btrfsback-lite --subvol /mnt/sda3/containers/container1 --local-dir /mnt/sda3/autosnap/container1 --daily-local 10 --remote-host 10.5.5.4 --remote-dir /backup/container1 --daily-remote 15
 /usr/local/sbin/btrfsback-lite --subvol /mnt/sda3/containers/container2 --local-dir /mnt/sda3/autosnap/container2 --daily-local 10 --remote-host 10.5.5.4 --remote-dir /backup/container2 --daily-remote 15
