@@ -208,9 +208,9 @@ If you need professional assistance with setting up reliable Btrfs backup strate
 
 Services include:
 
-One-time implementation & consultation: Custom deployment and integration tailored to your infrastructure, billed at an hourly rate.
+- One-time implementation & consultation - Custom deployment and integration tailored to your infrastructure, billed at an hourly rate.
 
-Maintenance & monitoring: Ongoing management, regular health checks, and priority support for a flat monthly fee.
+- Maintenance & monitoring - Ongoing management, regular health checks, and priority support for a flat monthly fee.
 
 For business inquiries and quotes, please contact:
 ```
