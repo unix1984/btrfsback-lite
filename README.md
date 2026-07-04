@@ -67,6 +67,7 @@ Typical use cases:
 - btrfs-progs installed
 - Passwordless SSH access to backup host (even with VPN)
 - Pre-created destination directories
+- grub-btrfs installed (https://github.com/Antynea/grub-btrfs) - to automatically include snapshots in the GRUB boot menu
 <br></br>
 
 ## 📋 Requirements
