@@ -51,7 +51,7 @@ Typical use cases:
 | Email reporting | Execution summary after each run |
 | Error visibility | Full stdout/stderr logging |
 | Pure Bash | No external frameworks |
-| Monitoring ready | Hooks for Nagios / Zabbix |
+| Monitoring | Hooks for Nagios / Zabbix (Coming soon) |
 
 ---
 ### Prerequisites
