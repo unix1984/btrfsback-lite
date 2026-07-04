@@ -23,7 +23,7 @@ Lightweight BTRFS snapshot and replication toolkit written in pure Bash.
 <img src="img/3.png" width="800">
 <img src="img/4.png" width="800">
 
-## Architecture
+## 🏗 Architecture
 
 Snapshot → Retention cleanup → Optional replication → Email reporting → Monitoring checks → Logging
 <br></br>
