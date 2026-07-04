@@ -82,6 +82,14 @@ wget -O /usr/local/sbin/btrfsback-lite https://raw.githubusercontent.com/unix198
 
 ### Manual Usage
 This configuration file defines settings for BTRFS snapshot creation and remote replication. It supports four execution profiles: DAILY, WEEKLY, MONTHLY, YEARLY.
+<br></br>
+###Open the file
+
+Edit the config using a terminal editor:
+```
+nano /root/btrfsback-lite.cfg
+vim /root/btrfsback-lite.cfg
+```
 Run the backup script with a selected profile:
 ```
 /usr/local/sbin/autosnaps-btrfsback-lite.sh --config /etc/btrfsback-lite.cfg DAILY
