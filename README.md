@@ -1,4 +1,4 @@
-# btrfsback-lite
+# 📦 btrfsback-lite
 
 <p align="center">
 Lightweight BTRFS snapshot and replication toolkit written in pure Bash.
@@ -48,7 +48,7 @@ Typical use cases:
 
 ---
 
-## Features
+## ⚡ Features
 
 | Feature | Description |
 |----------|-------------|
