@@ -3,7 +3,7 @@ exec 1> /var/log/btrlb.log 2>&1
 #set -xv
 
 # Check dependencies
-readonly DEPS=("date" "tree" "mail" "postfix" "pv" "awk" "/usr/games/lolcat")
+readonly DEPS=("date" "tree" "mail" "postfix" "pv" "awk")
 
 for dep in "${DEPS[@]}"; do
     if ! type -P "${dep}" &> /dev/null; then
@@ -18,7 +18,7 @@ fi
 
 
 print_help() {
-    /usr/games/lolcat << EOH
+    /usr/bin/cat << EOH
 ==========================================================================================================
 ██████╗ ████████╗██████╗ ██╗     ██████╗ 
 ██╔══██╗╚══██╔══╝██╔══██╗██║     ██╔══██╗
