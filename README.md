@@ -1,7 +1,7 @@
 # btrfsback-lite
 
 <p align="center">
-Lightweight BTRFS snapshot and replication toolkit written in pure Bash
+Lightweight BTRFS snapshot and replication toolkit written in pure Bash.
 </p>
 
 <p align="center">
