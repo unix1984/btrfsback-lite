@@ -52,7 +52,8 @@ Typical use cases:
 
 ```bash
 sudo apt update
-sudo apt install -y coreutils tree bsd-mailx postfix pv gawk lolcat
+sudo apt install -y coreutils tree bsd-mailx postfix pv gawk
+```
 
 Prerequisites
 BTRFS filesystem
@@ -65,13 +66,21 @@ Supported distributions:
 Ubuntu 22.04+
 Debian 11 / 12
 Any modern Linux with BTRFS support
+
 Installation
 Install binary
-sudo wget -O /usr/local/sbin/btrfsback-lite https://raw.githubusercontent.com/unix1984/btrfsback-lite/main/btrfsback-lite
+```
+wget -O /usr/local/sbin/btrfsback-lite https://raw.githubusercontent.com/unix1984/btrfsback-lite/main/btrfsback-lite
 sudo chmod +x /usr/local/sbin/btrfsback-lite
+```
+
 Install configuration
-sudo wget -O /etc/btrfsback-lite.cfg https://raw.githubusercontent.com/unix1984/btrfsback-lite/main/btrfsback-lite.cfg
+```
+wget -O /etc/btrfsback-lite.cfg https://raw.githubusercontent.com/unix1984/btrfsback-lite/main/btrfsback-lite.cfg
+```
+
 CLI Reference
+```
 -s, --subvol         Source BTRFS subvolume
 -l, --local-dir      Local snapshot directory
 -d, --daily-local    Number of local snapshots to keep
@@ -79,7 +88,9 @@ CLI Reference
 -r, --remote-dir     Remote snapshot directory
 -D, --daily-remote   Number of remote snapshots to keep
 -h, --help           Show help
+```
 Manual Usage
+```
 btrfsback-lite \
   --subvol / \
   --local-dir /mnt/sda2/autosnap-test \
@@ -87,7 +98,9 @@ btrfsback-lite \
   --remote-host 10.5.5.4 \
   --remote-dir /mnt/sdb2/BACKUP/VPS-rootfs/autosnap-test \
   --daily-remote 6
+```
 Cron Example
+```
 0 23 * * * root /usr/local/sbin/btrfsback-lite \
 --subvol / \
 --local-dir /mnt/sda2/autosnap-test \
@@ -96,31 +109,46 @@ Cron Example
 --remote-dir /mnt/sdb2/BACKUP/VPS-rootfs/autosnap-test \
 --daily-remote 6 \
 > /var/log/btrfsback-lite.log 2>&1
+```
+
 Multi-Volume Orchestration
-Scheduler
+```
 0 1 * * * root /usr/local/sbin/autosnaps-btrfsback-lite.sh --config /etc/btrfsback-lite.cfg DAILY
 0 3 * * 0 root /usr/local/sbin/autosnaps-btrfsback-lite.sh --config /etc/btrfsback-lite.cfg WEEKLY
 0 4 1 * * root /usr/local/sbin/autosnaps-btrfsback-lite.sh --config /etc/btrfsback-lite.cfg MONTHLY
 0 5 1 1 * root /usr/local/sbin/autosnaps-btrfsback-lite.sh --config /etc/btrfsback-lite.cfg YEARLY
+```
+
 Central Configuration
+```
 /usr/local/sbin/btrfsback-lite --subvol /mnt/sda3/containers/container1 --local-dir /mnt/sda3/autosnap/container1 --daily-local 10 --remote-host 10.5.5.4 --remote-dir /backup/container1 --daily-remote 15
 /usr/local/sbin/btrfsback-lite --subvol /mnt/sda3/containers/container2 --local-dir /mnt/sda3/autosnap/container2 --daily-local 10 --remote-host 10.5.5.4 --remote-dir /backup/container2 --daily-remote 15
 /usr/local/sbin/btrfsback-lite --subvol /mnt/sda3/containers/container3 --local-dir /mnt/sda3/autosnap/container3 --daily-local 10 --remote-host 10.5.5.4 --remote-dir /backup/container3 --daily-remote 15
+```
+
 btrlb (Local-only version)
 
 Lightweight tool for local snapshot rotation only (no replication).
 
 Install
+```
 wget -O /usr/local/sbin/btrlb https://raw.githubusercontent.com/unix1984/btrfs/main/btrlb
 chmod +x /usr/local/sbin/btrlb
+```
 Example
+```
 btrlb --subvol / --local-dir /mnt/sda2/autosnap-test --daily-local 10
+```
+
 Cron
+```
 0 23 * * * root /usr/local/sbin/btrlb \
 --subvol / \
 --local-dir /mnt/sda2/autosnap-test \
 --daily-local 10 \
 > /var/log/btrlb.log 2>&1
+```
+
 Architecture
 BTRFS snapshot creation per subvolume
 Retention-based cleanup system
