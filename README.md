@@ -4,33 +4,17 @@
 Lightweight BTRFS snapshot and replication toolkit written in pure Bash.
 </p>
 
-<img src="https://img.shields.io/badge/BTRFS-snapshots-green?style=for-the-badge&logo=linux" />
+<p align="center">
 
-<br>
+<img src="https://img.shields.io/badge/Linux-supported-success?style=flat-square&logo=linux" />
+<img src="https://img.shields.io/badge/Bash-100%25-blue?style=flat-square&logo=gnubash" />
+<img src="https://img.shields.io/badge/BTRFS-snapshots-green?style=flat-square&logo=linux" />
+<img src="https://img.shields.io/badge/License-MIT-orange?style=flat-square&logo=open-source-initiative" />
+<img src="https://img.shields.io/badge/SSH-secure-black?style=flat-square&logo=openssh" />
+<img src="https://img.shields.io/badge/Incremental-backups-purple?style=flat-square" />
+<img src="https://img.shields.io/badge/Replication-send%2Freceive-red?style=flat-square" />
 
-<!-- Features -->
-<img src="https://img.shields.io/badge/Incremental-backups-purple?style=for-the-badge" />
-<img src="https://img.shields.io/badge/Replication-btrfs%20send%2Freceive-red?style=for-the-badge" />
-<img src="https://img.shields.io/badge/SSH-secure%20transport-black?style=for-the-badge&logo=openssh" />
-
-<br>
-
-<!-- System -->
-<img src="https://img.shields.io/badge/Retention-policy-orange?style=for-the-badge" />
-<img src="https://img.shields.io/badge/Logging-centralized-lightgrey?style=for-the-badge" />
-<img src="https://img.shields.io/badge/Automation-cron%20ready-yellow?style=for-the-badge&logo=linux" />
-
-<br>
-
-<!-- Philosophy -->
-<img src="https://img.shields.io/badge/Minimalism-over%20complexity-9cf?style=for-the-badge" />
-<img src="https://img.shields.io/badge/Pure-Bash-ff69b4?style=for-the-badge&logo=gnubash" />
-<img src="https://img.shields.io/badge/No-external%20dependencies-critical?style=for-the-badge" />
-
-<br>
-
-<!-- License -->
-<img src="https://img.shields.io/badge/License-MIT-orange?style=for-the-badge&logo=open-source-initiative" />
+</p>
 
 </p>
 
