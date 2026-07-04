@@ -78,7 +78,7 @@ Typical use cases:
 - Any modern Linux distributions with BTRFS support.
 
 <br></br>
-### System packages
+### 💻 System packages
 Run as root (sudo su - / sudo -i):
 
 ```bash
@@ -93,7 +93,7 @@ wget -O /usr/local/sbin/btrfsback-lite https://raw.githubusercontent.com/unix198
 ```
 <br></br>
 
-### Manual Usage
+### 🛠 Manual Usage
 This configuration file defines settings for BTRFS snapshot creation and remote replication. It supports four execution profiles: DAILY, WEEKLY, MONTHLY, YEARLY.
 <br></br>
 
@@ -111,7 +111,7 @@ Run the backup script with a selected profile:
 /usr/local/sbin/autosnaps-btrfsback-lite.sh --config /etc/btrfsback-lite.cfg YEARLY
 ```
 
-## Configuration Structure
+## 🖧 Configuration Structure
 
 Each profile (DAILY, WEEKLY, MONTHLY, YEARLY) defines its own variables using a common prefix pattern.
 
@@ -127,7 +127,7 @@ Each profile (DAILY, WEEKLY, MONTHLY, YEARLY) defines its own variables using a 
 - `*_EMAIL` – report email address  
 - `*_EXCLUDE_CONTAINERS` – space-separated list of excluded containers  
 
-### Example: DAILY Section
+### ⓘ Example: DAILY Section
 
 ```
 DAILY_LOCALDIR_ROOTFS="/mnt/sda3/.snapshots/ROOTFS-btrfsback/daily"
@@ -142,14 +142,14 @@ DAILY_RSNAP_LXD="7"
 DAILY_EMAIL="unixit.mail@gmail.com"
 ```
 
-### Email delivery notice
+### ✉ Email delivery notice
 
 The first email report may occasionally be delivered to the Spam / Junk folder depending on the recipient’s mail provider.
 
 If this happens, please mark the email as “Not spam” or move it to the inbox. This helps improve future delivery and ensures subsequent reports arrive correctly in the inbox.
 
 <br></br>
-### ⏱️ Cron Example
+### ⏱️ Cron
 ```
 # BTRFS autosnap and replication scheduling.
 # DAILY snapshot - every day at 01:00
@@ -171,7 +171,7 @@ To view a specific backup run log:
 cat /var/log/btrfsback-lite-2026-06-03_01-00-01.log
 ```
 <br></br>
-## Alternative Usage (No Config File)
+## ↪️ Alternative Usage (No Config File)
 Alternatively, the **btrfsback-lite** script can be executed directly from the command line without using a configuration file. This approach is completely independent of LXD, allowing you to back up any arbitrary Btrfs subvolume individually:
 ```
 /usr/local/sbin/btrfsback-lite --subvol /mnt/sda3/containers/container1 --local-dir /mnt/sda3/autosnap/container1 --daily-local 10 --remote-host 10.5.5.4 --remote-dir /backup/container1 --daily-remote 15
@@ -190,7 +190,7 @@ You can also schedule these individual subvolume backups directly via crontab:
 <br></br>
 <br></br>
 <br></br>
-## btrlb (Local-only version, no replication.)
+## 📦 btrlb (Local-only version, no replication.)
 <img src="img/btrlb-help.png" width="800">
 
 Lightweight tool for local snapshot rotation only (no replication).
@@ -205,7 +205,7 @@ wget -O /usr/local/sbin/btrlb https://raw.githubusercontent.com/unix1984/btrfs/m
 btrlb --subvol / --local-dir /mnt/sda2/autosnap-test --daily-local 10
 ```
 <br></br>
-### Cron
+### ⏱️ Cron
 ```
 30 23 * * * root /usr/local/sbin/btrlb --subvol / --local-dir /mnt/sda2/autosnap-test --daily-local 10 > /var/log/btrlb.log 2>&1
 ```
