@@ -20,7 +20,7 @@ Lightweight BTRFS snapshot and replication toolkit written in pure Bash
 <img src="img/4.png" width="600">
 
 ## Overview
-
+<img src="img/btr-lite.png" width="600">
 btrfsback-lite is a lightweight, production-ready backup and replication toolkit built entirely in **pure Bash**, relying on native **BTRFS snapshot** and **btrfs send/receive** mechanisms.
 
 It is designed for simplicity, auditability, and predictable behavior in production Linux environments.
@@ -154,6 +154,7 @@ You can backup containers individually using the following commands:
 <br></br>
 <br></br>
 ## btrlb (Local-only version, no replication.)
+<img src="img/btrlb-help.png" width="600">
 
 Lightweight tool for local snapshot rotation only (no replication).
 <br></br>
