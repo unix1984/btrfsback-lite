@@ -42,6 +42,7 @@ Typical use cases:
 
 - Root filesystem backups (/)
 - LXD container snapshotting on BTRFS
+- Any arbitrary Btrfs subvolume backup and snapshotting
 - Incremental off-site replication
 - Automated retention policies
 - Multi-volume backup orchestration
