@@ -67,18 +67,14 @@ apt install -y coreutils tree bsd-mailx postfix pv gawk
 - btrfs-progs installed
 - Passwordless SSH access to backup host
 - Pre-created destination directories
-
-
-
-
+<br>
+<br>
 Installation
 ```
 wget -O /usr/local/sbin/btrfsback-lite https://raw.githubusercontent.com/unix1984/btrfsback-lite/main/btrfsback-lite && wget -O /usr/local/sbin/autosnaps-btrfsback-lite.sh https://raw.githubusercontent.com/unix1984/btrfsback-lite/refs/heads/main/autosnaps-btrfsback-lite.sh && wget -O /etc/btrfsback-lite.cfg https://raw.githubusercontent.com/unix1984/btrfsback-lite/main/btrfsback-lite.cfg && chmod +x /usr/local/sbin/btrfsback-lite /usr/local/sbin/autosnaps-btrfsback-lite.sh
 ```
-
-
-
-
+<br>
+<br>
 CLI Reference
 ```
 $ btrfsback-lite -h
@@ -95,18 +91,14 @@ Usage:
     -D, --snap-remote   Number of remote daily snapshots to keep
     -h, --help          This help message
 ```
-
-
-
-
+<br>
+<br>
 Manual Usage
 ```
 btrfsback-lite --subvol / --local-dir /mnt/sda2/autosnap-test --daily-local 4 --remote-host 10.5.5.4 --remote-dir /mnt/sdb2/BACKUP/VPS-rootfs/autosnap-test --daily-remote 6
 ```
-
-
-
-
+<br>
+<br>
 Cron Example
 ```
 # BTRFS autosnap and replication scheduling.
@@ -120,10 +112,8 @@ Cron Example
 0 5 1 1 * root /usr/local/sbin/autosnaps-btrfsback-lite.sh --config /etc/btrfsback-lite.cfg YEARLY
 
 ```
-
-
-
-
+<br>
+<br>
 Central Configuration
 You can backup containers individually using the following commands:
 ```
@@ -131,12 +121,12 @@ You can backup containers individually using the following commands:
 /usr/local/sbin/btrfsback-lite --subvol /mnt/sda3/containers/container2 --local-dir /mnt/sda3/autosnap/container2 --daily-local 10 --remote-host 10.5.5.4 --remote-dir /backup/container2 --daily-remote 15
 /usr/local/sbin/btrfsback-lite --subvol /mnt/sda3/containers/container3 --local-dir /mnt/sda3/autosnap/container3 --daily-local 10 --remote-host 10.5.5.4 --remote-dir /backup/container3 --daily-remote 15
 ```
-
-
-
-
-
-
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 ## btrlb (Local-only version, no replication.)
 
 Lightweight tool for local snapshot rotation only (no replication).
