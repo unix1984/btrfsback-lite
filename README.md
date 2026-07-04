@@ -213,12 +213,14 @@ Services include:
 - Maintenance & monitoring - Ongoing management, regular health checks, and priority support for a flat monthly fee.
 
 For business inquiries and quotes, please contact:
-```
-**Matyi Szabolcs**
+
+<pre>
+<strong>Matyi Szabolcs</strong>
 Linux System Engineer
 
 unixit.mail@gmail.com
-```
+</pre>
+
 <br></br>
 ### License
 
