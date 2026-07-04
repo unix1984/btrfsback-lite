@@ -1,78 +1,87 @@
-# btrfsback-lite
-This is a lightweight BTRFS snapshot and replication script.
+# 🚀 btrfsback-lite
 
-I use it for snapshotting and replication of rootfs / and LXD containers.
-The **autosnaps-btrfsback-lite.sh** script is used to back up multiple btrfs subvolumes. 
-Just rewrite the correct path in the file and use it.
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Bash](https://img.shields.io/badge/Language-100%25%20Bash-4eaa42.svg)](https://www.gnu.org/software/bash/)
+[![BTRFS](https://img.shields.io/badge/FS-BTRFS-blue.svg)](https://btrfs.readthedocs.io/)
 
-The SSH-Key must be copied to the remote host.
-The folders for snapshots (rootfs, LXDs) must also be created.
-<br/>
-<br/>
-Tested on Ubuntu 22.04 and Debian 11.
-<br/>
-However, it's pretty universal, you just need bash and btrfs.
-<br/>
-<br/>
-	  
-![alt text](https://raw.githubusercontent.com/unix1984/btrfs/main/img/btrfsback-lite-help.png)
-<br/>
-<br/>
-Daily E-Mail report:
-![alt text](https://raw.githubusercontent.com/unix1984/btrfsback-lite/main/img/Backup-Email-Report.png)
-<br/>
+A highly efficient, lightweight BTRFS snapshot and replication toolset.
 
-**Install:**
+> 💡 **Why "Lite"?** This toolset consists of dead-simple, **100% pure Bash scripts**. It is ultra-lightweight, universally compatible, and completely auditable. No heavy frameworks, no bloated dependencies—just native Bash and BTRFS power.
 
-```wget -O /usr/local/sbin/btrfsback-lite https://raw.githubusercontent.com/unix1984/btrfsback-lite/main/btrfsback-lite && chmod +x /usr/local/sbin/btrfsback-lite```
+Perfect for automated production snapshotting and offsite replication of root filesystems (`/`) and live LXD containers.
 
+---
 
-**Dependencies:**
+## ✨ Key Features in v2.0
 
-```apt install coreutils tree bsd-mailx postfix pv gawk lolcat```
+* ⚡ **Incremental Replication:** Leverages native BTRFS send/receive streams to sync only modified data blocks, slashing backup windows and bandwidth.
+* 📬 **Rich E-Mail Reporting:** Dispatches a clean, detailed summary listing every single execution task and state at the end of the chain.
+* 🛡️ **Fail-Safe Visibility:** Full stderr and stdout tracking. If a single snapshot fails, error outputs are explicitly spotlighted inside your daily report.
+* 📈 **Monitoring Ready:** Built-in hooks for upcoming native Nagios and Zabbix telemetry probes.
 
+---
 
-**Example:**
+## 🛠️ Infrastructure Requirements
 
-```btrfsback-lite --subvol / --local-dir /mnt/sda2/autosnap-test --daily-local 4 --remote-host 10.5.5.4 --remote-dir /mnt/sdb2/BACKUP/VPS-rootfs/autosnap-test --daily-remote 6```
+### 1. System Packages
+```bash
+sudo apt update && sudo apt install -y coreutils tree bsd-mailx postfix pv gawk lolcat
+2. Prerequisites
+SSH Keys: Passwordless SSH key authentication must be actively deployed to the destination backup target.
 
+Paths: Target storage directories must be initialized beforehand on both the local and remote sides.
 
+Validated environments: Ubuntu 22.04 LTS, Debian 11/12 (Bookworm). Works seamlessly across any modern Linux distribution.
 
-**cron:**
+📦 Component Layout & Deployment
+1. btrfsback-lite (Core Replicator)
+Handles local snapshot aging policies and orchestrates secure, encrypted offsite transfers.
 
-```0  23  * * *     root   /usr/local/sbin/btrfsback-lite --subvol / --local-dir /mnt/sda2/autosnap-test --daily-local 4 --remote-host 10.5.5.4 --remote-dir /mnt/sdb2/BACKUP/VPS-rootfs/autosnap-test --daily-remote 6 > /var/log/btrfsback-lite.log 2>&1```
+Install
+Bash
+sudo wget -O /usr/local/sbin/btrfsback-lite [https://raw.githubusercontent.com/unix1984/btrfsback-lite/main/btrfsback-lite](https://raw.githubusercontent.com/unix1984/btrfsback-lite/main/btrfsback-lite)
+sudo chmod +x /usr/local/sbin/btrfsback-lite
 
+# Deploy system configuration profile
+sudo wget -O /etc/btrfsback-lite.cfg [https://raw.githubusercontent.com/unix1984/btrfsback-lite/main/btrfsback-lite.cfg](https://raw.githubusercontent.com/unix1984/btrfsback-lite/main/btrfsback-lite.cfg)
+CLI Reference
+Plaintext
+Options:
+  -s, --subvol        Target BTRFS source subvolume path
+  -l, --local-dir     Local retention directory path
+  -d, --daily-local   Maximum local daily snapshots to retain
+  -H, --remote-host   Remote replication target (IP / FQDN)
+  -r, --remote-dir    Remote retention directory path
+  -D, --daily-remote  Maximum remote daily snapshots to retain
+  -h, --help          Show this manual
+Manual Run Example
+Bash
+btrfsback-lite --subvol / --local-dir /mnt/sda2/autosnap-test --daily-local 4 --remote-host 10.5.5.4 --remote-dir /mnt/sdb2/BACKUP/VPS-rootfs/autosnap-test --daily-remote 6
+Standard Crontab Integration (/etc/cron.d/btrfsback-lite)
+Kódrészlet
+0 23 * * * root /usr/local/sbin/btrfsback-lite --subvol / --local-dir /mnt/sda2/autosnap-test --daily-local 4 --remote-host 10.5.5.4 --remote-dir /mnt/sdb2/BACKUP/VPS-rootfs/autosnap-test --daily-remote 6 > /var/log/btrfsback-lite.log 2>&1
+2. Multi-Volume Orchestration (Automation Wrapper)
+To execute continuous batch updates across several dynamic mountpoints (e.g. 10+ isolated LXD nodes) matching strict retention schedules, use the master orchestration runner with your central config profile.
 
-**or for multiple subvols:**
+Production Automation Cron (/etc/crontab or /etc/cron.d/btrfsback-lite-schedule)
+Kódrészlet
+# BTRFS autosnap and replication scheduling.
+# DAILY snapshot - every day at 01:00
+0 1 * * * root /usr/local/sbin/autosnaps-btrfsback-lite.sh --config /etc/btrfsback-lite.cfg DAILY
 
-```0  0  * * *     root   /root/autosnaps-btrfsback-lite.sh```
+# WEEKLY snapshot - every Sunday at 03:00
+0 3 * * 0 root /usr/local/sbin/autosnaps-btrfsback-lite.sh --config /etc/btrfsback-lite.cfg WEEKLY
 
+# MONTHLY snapshot - 1st day of each month at 04:00
+0 4 1 * * root /usr/local/sbin/autosnaps-btrfsback-lite.sh --config /etc/btrfsback-lite.cfg MONTHLY
 
-```/usr/local/sbin/btrfsback-lite --subvol /mnt/sda3/containers/container1 --local-dir /mnt/sda3/autosnap-btrfsback/daily/container1 --daily-local 10 --remote-host 10.5.5.4 --remote-dir /mnt/rootfs/BACKUP-VPS/LXD/daily/container1 --daily-remote 15```
-```/usr/local/sbin/btrfsback-lite --subvol /mnt/sda3/containers/container2 --local-dir /mnt/sda3/autosnap-btrfsback/daily/container2 --daily-local 10 --remote-host 10.5.5.4 --remote-dir /mnt/rootfs/BACKUP-VPS/LXD/daily/container2 --daily-remote 15```
-```/usr/local/sbin/btrfsback-lite --subvol /mnt/sda3/containers/container3 --local-dir /mnt/sda3/autosnap-btrfsback/daily/container3 --daily-local 10 --remote-host 10.5.5.4 --remote-dir /mnt/rootfs/BACKUP-VPS/LXD/daily/container3 --daily-remote 15```
-```usr/local/sbin/btrfsback-lite --subvol /mnt/sda3/containers/container4 --local-dir /mnt/sda3/autosnap-btrfsback/daily/container4 --daily-local 10 --remote-host 10.5.5.4 --remote-dir /mnt/rootfs/BACKUP-VPS/LXD/daily/container4 --daily-remote 15```
-```/usr/local/sbin/btrfsback-lite --subvol /mnt/sda3/containers/container5 --local-dir /mnt/sda3/autosnap-btrfsback/daily/container5 --daily-local 10 --remote-host 10.5.5.4 --remote-dir /mnt/rootfs/BACKUP-VPS/LXD/daily/container5 --daily-remote 15```
-```/usr/local/sbin/btrfsback-lite --subvol /mnt/sda3/containers/container6 --local-dir /mnt/sda3/autosnap-btrfsback/daily/container6 --daily-local 10 --remote-host 10.5.5.4 --remote-dir /mnt/rootfs/BACKUP-VPS/LXD/daily/container6 --daily-remote 15```
-```/usr/local/sbin/btrfsback-lite --subvol /mnt/sda3/containers/container7 --local-dir /mnt/sda3/autosnap-btrfsback/daily/container7 --daily-local 10 --remote-host 10.5.5.4 --remote-dir /mnt/rootfs/BACKUP-VPS/LXD/daily/container7 --daily-remote 15```
-
-
-
-```
-Usage:
- -s, --subvol		-Selected BTRFS subvolume for snapshot.
- -l, --local-dir	-Location of snapshots.
- -d, --daily-local	-Number of local daily snapshots.
- -H, --remote-host	-Remote Host IP Address.
- -r, --remote-dir	-Remote location of snapshots.
- -D, --daily-remote     -Number of remote daily snapshots.
- -h, --help		-This help.
-```
-
-<br/>
-<br/>
-<br/>
-<br/>
+# YEARLY snapshot - January 1st at 05:00
+0 5 1 1 * root /usr/local/sbin/autosnaps-btrfsback-lite.sh --config /etc/btrfsback-lite.cfg YEARLY
+Central Configuration Matrix Block (/etc/btrfsback-lite.cfg)
+Bash
+/usr/local/sbin/btrfsback-lite --subvol /mnt/sda3/containers/container1 --local-dir /mnt/sda3/autosnap-btrfsback/daily/container1 --daily-local 10 --remote-host 10.5.5.4 --remote-dir /mnt/rootfs/BACKUP-VPS/LXD/daily/container1 --daily-remote 15
+/usr/local/sbin/btrfsback-lite --subvol /mnt/sda3/containers/container2 --local-dir /mnt/sda3/autosnap-btrfsback/daily/container2 --daily-local 10 --remote-host 10.5.5.4 --remote-dir /mnt/rootfs/BACKUP-VPS/LXD/daily/container2 --daily-remote 15
+/usr/local/sbin/btrfsback-lite --subvol /mnt/sda3/containers/container3 --local-dir /mnt/sda3/autosnap-btrfsback/daily/container3 --daily-local 10 --remote-host 10.5.5.4 --remote-dir /mnt/rootfs/BACKUP-VPS/LXD/daily/container3 --daily-remote 15
 
 # btrlb
 Btrlb is a mini version that only rotates **local backups** with snapshots without replication.
