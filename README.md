@@ -17,31 +17,31 @@ Lightweight BTRFS snapshot and replication toolkit written in pure Bash
 
 ## Overview
 
-btrfsback-lite is a lightweight and fully auditable backup system based on native BTRFS snapshot and send/receive functionality.
+btrfsback-lite is a lightweight, production-ready backup and replication toolkit built entirely in **pure Bash**, relying on native **BTRFS snapshot** and **btrfs send/receive** mechanisms.
 
-It is designed for production Linux environments where simplicity, transparency, and reliability are more important than complex frameworks.
+It is designed for simplicity, auditability, and predictable behavior in production Linux environments.
 
 Typical use cases:
 
 - Root filesystem backups (/)
-- LXD container snapshots
+- LXD container snapshotting
 - Incremental off-site replication
 - Automated retention policies
-- Server fleet backup orchestration
+- Multi-volume backup orchestration
 
 ---
 
-## Key Features
+## Features
 
 | Feature | Description |
 |----------|-------------|
 | Incremental replication | Uses native `btrfs send/receive` |
-| Snapshot automation | Scheduled local snapshots |
-| Retention control | Configurable local and remote cleanup |
-| SSH replication | Secure remote transfer via SSH |
-| Email reporting | Full execution summary per run |
-| Error visibility | Captures stdout/stderr for debugging |
-| Pure Bash | No external runtime dependencies |
+| Snapshot automation | Scheduled snapshot creation |
+| Retention management | Local and remote cleanup policies |
+| Secure transfer | SSH-based replication |
+| Email reporting | Execution summary after each run |
+| Error visibility | Full stdout/stderr logging |
+| Pure Bash | No external frameworks |
 | Monitoring ready | Hooks for Nagios / Zabbix |
 
 ---
@@ -56,9 +56,9 @@ sudo apt install -y coreutils tree bsd-mailx postfix pv gawk lolcat
 
 Prerequisites
 BTRFS filesystem
-Passwordless SSH access to backup server
+btrfs-progs installed
+Passwordless SSH access to backup host
 Pre-created destination directories
-Linux system with btrfs-progs
 
 Supported distributions:
 
@@ -66,21 +66,18 @@ Ubuntu 22.04+
 Debian 11 / 12
 Any modern Linux with BTRFS support
 Installation
-Install main tool
-sudo wget -O /usr/local/sbin/btrfsback-lite \
-https://raw.githubusercontent.com/unix1984/btrfsback-lite/main/btrfsback-lite
-
+Install binary
+sudo wget -O /usr/local/sbin/btrfsback-lite https://raw.githubusercontent.com/unix1984/btrfsback-lite/main/btrfsback-lite
 sudo chmod +x /usr/local/sbin/btrfsback-lite
 Install configuration
-sudo wget -O /etc/btrfsback-lite.cfg \
-https://raw.githubusercontent.com/unix1984/btrfsback-lite/main/btrfsback-lite.cfg
+sudo wget -O /etc/btrfsback-lite.cfg https://raw.githubusercontent.com/unix1984/btrfsback-lite/main/btrfsback-lite.cfg
 CLI Reference
 -s, --subvol         Source BTRFS subvolume
 -l, --local-dir      Local snapshot directory
--d, --daily-local    Number of local snapshots to retain
--H, --remote-host    Remote backup host
+-d, --daily-local    Number of local snapshots to keep
+-H, --remote-host    Remote backup host (IP/FQDN)
 -r, --remote-dir     Remote snapshot directory
--D, --daily-remote   Number of remote snapshots to retain
+-D, --daily-remote   Number of remote snapshots to keep
 -h, --help           Show help
 Manual Usage
 btrfsback-lite \
@@ -90,7 +87,7 @@ btrfsback-lite \
   --remote-host 10.5.5.4 \
   --remote-dir /mnt/sdb2/BACKUP/VPS-rootfs/autosnap-test \
   --daily-remote 6
-Cron Setup
+Cron Example
 0 23 * * * root /usr/local/sbin/btrfsback-lite \
 --subvol / \
 --local-dir /mnt/sda2/autosnap-test \
@@ -100,38 +97,21 @@ Cron Setup
 --daily-remote 6 \
 > /var/log/btrfsback-lite.log 2>&1
 Multi-Volume Orchestration
-
-For multiple containers or subvolumes, use the orchestration wrapper.
-
 Scheduler
 0 1 * * * root /usr/local/sbin/autosnaps-btrfsback-lite.sh --config /etc/btrfsback-lite.cfg DAILY
 0 3 * * 0 root /usr/local/sbin/autosnaps-btrfsback-lite.sh --config /etc/btrfsback-lite.cfg WEEKLY
 0 4 1 * * root /usr/local/sbin/autosnaps-btrfsback-lite.sh --config /etc/btrfsback-lite.cfg MONTHLY
 0 5 1 1 * root /usr/local/sbin/autosnaps-btrfsback-lite.sh --config /etc/btrfsback-lite.cfg YEARLY
-Central Configuration File
-/usr/local/sbin/btrfsback-lite \
---subvol /mnt/sda3/containers/container1 \
---local-dir /mnt/sda3/autosnap/container1 \
---daily-local 10 \
---remote-host 10.5.5.4 \
---remote-dir /backup/lxd/container1 \
---daily-remote 15
-
-/usr/local/sbin/btrfsback-lite \
---subvol /mnt/sda3/containers/container2 \
---local-dir /mnt/sda3/autosnap/container2 \
---daily-local 10 \
---remote-host 10.5.5.4 \
---remote-dir /backup/lxd/container2 \
---daily-remote 15
+Central Configuration
+/usr/local/sbin/btrfsback-lite --subvol /mnt/sda3/containers/container1 --local-dir /mnt/sda3/autosnap/container1 --daily-local 10 --remote-host 10.5.5.4 --remote-dir /backup/container1 --daily-remote 15
+/usr/local/sbin/btrfsback-lite --subvol /mnt/sda3/containers/container2 --local-dir /mnt/sda3/autosnap/container2 --daily-local 10 --remote-host 10.5.5.4 --remote-dir /backup/container2 --daily-remote 15
+/usr/local/sbin/btrfsback-lite --subvol /mnt/sda3/containers/container3 --local-dir /mnt/sda3/autosnap/container3 --daily-local 10 --remote-host 10.5.5.4 --remote-dir /backup/container3 --daily-remote 15
 btrlb (Local-only version)
 
-A simplified version of the tool that performs local snapshot rotation only without replication.
+Lightweight tool for local snapshot rotation only (no replication).
 
 Install
-wget -O /usr/local/sbin/btrlb \
-https://raw.githubusercontent.com/unix1984/btrfs/main/btrlb
-
+wget -O /usr/local/sbin/btrlb https://raw.githubusercontent.com/unix1984/btrfs/main/btrlb
 chmod +x /usr/local/sbin/btrlb
 Example
 btrlb --subvol / --local-dir /mnt/sda2/autosnap-test --daily-local 10
@@ -142,18 +122,17 @@ Cron
 --daily-local 10 \
 > /var/log/btrlb.log 2>&1
 Architecture
-Local snapshot creation via BTRFS subvolume snapshots
+BTRFS snapshot creation per subvolume
 Retention-based cleanup system
-Incremental transfer via btrfs send/receive
-Optional remote pruning
+Incremental replication via btrfs send/receive
 SSH-based secure transport
-Logging and reporting pipeline
+Centralized logging and reporting
 Design Philosophy
 Minimalism over complexity
-Native Linux tooling only
-No external dependencies beyond standard system packages
-Fully auditable Bash implementation
-Predictable and deterministic behavior
+Pure Linux tooling only
+Fully transparent Bash implementation
+No external dependencies beyond system packages
+Deterministic and predictable behavior
 License
 
-MIT License
+MIT
