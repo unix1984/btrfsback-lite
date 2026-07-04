@@ -196,19 +196,7 @@ btrlb --subvol / --local-dir /mnt/sda2/autosnap-test --daily-local 10
 <br></br>
 <br></br>
 <br></br>
-### Architecture
 
-BTRFS snapshot creation per subvolume
-Retention-based cleanup system
-Incremental replication via btrfs send/receive
-SSH-based secure transport
-Centralized logging and reporting
-Design Philosophy
-Minimalism over complexity
-Pure Linux tooling only
-Fully transparent Bash implementation
-No external dependencies beyond system packages
-Deterministic and predictable behavior
 License
 
 MIT
