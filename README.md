@@ -20,6 +20,9 @@ Lightweight BTRFS snapshot and replication toolkit written in pure Bash
 <img src="img/4.png" width="800">
 
 ## Overview
+```
+btrfsback-lite -h
+```
 <img src="img/btr-lite.png" width="800">
 <br></br>
 btrfsback-lite is a lightweight, production-ready backup and replication toolkit built entirely in **pure Bash**, relying on native **BTRFS snapshot** and **btrfs send/receive** mechanisms.
