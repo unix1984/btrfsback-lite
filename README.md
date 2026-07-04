@@ -27,7 +27,7 @@ Lightweight BTRFS snapshot and replication toolkit written in pure Bash.
 
 Snapshot → Retention cleanup → Optional replication → Email reporting → Monitoring checks → Logging
 <br></br>
-## Overview
+## ⚙️ Overview
 ```
 btrfsback-lite -h
 ```
@@ -87,7 +87,7 @@ apt install -y coreutils tree bsd-mailx postfix pv gawk
 ```
 
 <br></br>
-### Installation - btrfsback-lite
+### 📥 Installation - btrfsback-lite
 ```
 wget -O /usr/local/sbin/btrfsback-lite https://raw.githubusercontent.com/unix1984/btrfsback-lite/main/btrfsback-lite && wget -O /usr/local/sbin/autosnaps-btrfsback-lite.sh https://raw.githubusercontent.com/unix1984/btrfsback-lite/refs/heads/main/autosnaps-btrfsback-lite.sh && wget -O /etc/btrfsback-lite.cfg https://raw.githubusercontent.com/unix1984/btrfsback-lite/main/btrfsback-lite.cfg && chmod +x /usr/local/sbin/btrfsback-lite /usr/local/sbin/autosnaps-btrfsback-lite.sh
 ```
@@ -149,7 +149,7 @@ The first email report may occasionally be delivered to the Spam / Junk folder d
 If this happens, please mark the email as “Not spam” or move it to the inbox. This helps improve future delivery and ensures subsequent reports arrive correctly in the inbox.
 
 <br></br>
-### Cron Example
+### ⏱️ Cron Example
 ```
 # BTRFS autosnap and replication scheduling.
 # DAILY snapshot - every day at 01:00
@@ -162,7 +162,7 @@ If this happens, please mark the email as “Not spam” or move it to the inbox
 0 5 1 1 * root /usr/local/sbin/autosnaps-btrfsback-lite.sh --config /etc/btrfsback-lite.cfg YEARLY
 ```
 <br></br>
-### Log file
+### 📊 Log file
 
 Backup execution logs are written to the system log directory and can be inspected for debugging and verification purposes.
 
@@ -178,7 +178,7 @@ Alternatively, the **btrfsback-lite** script can be executed directly from the c
 /usr/local/sbin/btrfsback-lite --subvol /mnt/sda3/containers/container2 --local-dir /mnt/sda3/autosnap/container2 --daily-local 10 --remote-host 10.5.5.4 --remote-dir /backup/container2 --daily-remote 15
 /usr/local/sbin/btrfsback-lite --subvol /mnt/sda3/containers/container3 --local-dir /mnt/sda3/autosnap/container3 --daily-local 10 --remote-host 10.5.5.4 --remote-dir /backup/container3 --daily-remote 15
 ```
-### Cron Example (No Config File)
+### ⏱️ Cron Example (No Config File)
 You can also schedule these individual subvolume backups directly via crontab:
 
 ```
@@ -195,7 +195,7 @@ You can also schedule these individual subvolume backups directly via crontab:
 
 Lightweight tool for local snapshot rotation only (no replication).
 <br></br>
-### Install
+### 📥 Install
 ```
 wget -O /usr/local/sbin/btrlb https://raw.githubusercontent.com/unix1984/btrfs/main/btrlb && chmod +x /usr/local/sbin/btrlb
 ```
@@ -212,7 +212,7 @@ btrlb --subvol / --local-dir /mnt/sda2/autosnap-test --daily-local 10
 <br></br>
 <br></br>
 <br></br>
-### Commercial Support
+### ✉ Commercial Support
 If you need professional assistance with setting up reliable Btrfs backup strategies in your production environment, corporate services are available.
 
 Services include:
