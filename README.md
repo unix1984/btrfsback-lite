@@ -156,6 +156,7 @@ If this happens, please mark the email as “Not spam” or move it to the inbox
 ### Log file
 
 Backup execution logs are written to the system log directory and can be inspected for debugging and verification purposes.
+
 To view a specific backup run log:
 ```
 cat /var/log/btrfsback-lite-2026-06-03_01-00-01.log
