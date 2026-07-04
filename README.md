@@ -204,11 +204,10 @@ One-time implementation & consultation: Custom deployment and integration tailor
 Maintenance & monitoring: Ongoing management, regular health checks, and priority support for a flat monthly fee.
 
 For business inquiries and quotes, please contact:
-
+```
 Matyi Szabolcs
-
-
-ipconnect.mail@gmail.com
+unixit.mail@gmail.com
+```
 <br></br>
 ### License
 <br></br>
