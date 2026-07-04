@@ -70,13 +70,13 @@ apt install -y coreutils tree bsd-mailx postfix pv gawk
 ```
 
 <br></br>
-Installation - btrfsback-lite
+###Installation - btrfsback-lite
 ```
 wget -O /usr/local/sbin/btrfsback-lite https://raw.githubusercontent.com/unix1984/btrfsback-lite/main/btrfsback-lite && wget -O /usr/local/sbin/autosnaps-btrfsback-lite.sh https://raw.githubusercontent.com/unix1984/btrfsback-lite/refs/heads/main/autosnaps-btrfsback-lite.sh && wget -O /etc/btrfsback-lite.cfg https://raw.githubusercontent.com/unix1984/btrfsback-lite/main/btrfsback-lite.cfg && chmod +x /usr/local/sbin/btrfsback-lite /usr/local/sbin/autosnaps-btrfsback-lite.sh
 ```
 <br></br>
 
-Manual Usage
+###Manual Usage
 This configuration file defines settings for BTRFS snapshot creation and remote replication. It supports four execution profiles: DAILY, WEEKLY, MONTHLY, YEARLY.
 Run the backup script with a selected profile:
 ```
@@ -131,7 +131,7 @@ Cron Example
 
 ```
 <br></br>
-Central Configuration
+###Central Configuration
 You can backup containers individually using the following commands:
 ```
 /usr/local/sbin/btrfsback-lite --subvol /mnt/sda3/containers/container1 --local-dir /mnt/sda3/autosnap/container1 --daily-local 10 --remote-host 10.5.5.4 --remote-dir /backup/container1 --daily-remote 15
