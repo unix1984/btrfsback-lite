@@ -1,13 +1,15 @@
 #!/bin/bash
-#exec 1> /var/log/btrfsback-lite.log 2>&1
-#set -xv
+# BTRFS snapshot & replication script.
+# set -xv
 
-# Check dependencies
-readonly DEPS=("date" "tree" "mail" "postfix" "pv" "awk")
-
+# ================================
+# Dependencies check
+# ================================
+dep_exit=0
+readonly DEPS=("date" "tree" "sendmail" "postfix" "awk" "btrfs" "ssh")
 for dep in "${DEPS[@]}"; do
     if ! type -P "${dep}" &> /dev/null; then
-        echo -e "Command not found: ${dep}"
+        echo "Command not found: ${dep}"
         dep_exit=1
     fi
 done
@@ -16,116 +18,127 @@ if [[ "${dep_exit}" -eq 1 ]]; then
     exit 1
 fi
 
-
-
+# ================================
+# Help function
+# ================================
 print_help() {
-    cat << EOH
-==========================================================================================================
-██████╗ ████████╗██████╗ ███████╗███████╗██████╗  █████╗  ██████╗██╗  ██╗     ██╗     ██╗████████╗███████╗
-██╔══██╗╚══██╔══╝██╔══██╗██╔════╝██╔════╝██╔══██╗██╔══██╗██╔════╝██║ ██╔╝     ██║     ██║╚══██╔══╝██╔════╝
-██████╔╝   ██║   ██████╔╝█████╗  ███████╗██████╔╝███████║██║     █████╔╝█████╗██║     ██║   ██║   █████╗
-██╔══██╗   ██║   ██╔══██╗██╔══╝  ╚════██║██╔══██╗██╔══██║██║     ██╔═██╗╚════╝██║     ██║   ██║   ██╔══╝
-██████╔╝   ██║   ██║  ██║██║     ███████║██████╔╝██║  ██║╚██████╗██║  ██╗     ███████╗██║   ██║   ███████╗
-╚═════╝    ╚═╝   ╚═╝  ╚═╝╚═╝     ╚══════╝╚═════╝ ╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝     ╚══════╝╚═╝   ╚═╝   ╚══════╝
-==========================================================================================================
-	   This is a lightweight BTRFS snapshot and replication script. v1.0
-============================================================================================================================================================================
-Install: wget -O /usr/local/sbin/btrfsback-lite https://raw.githubusercontent.com/unix1984/btrfs/main/btrfsback-lite && chmod +x /usr/local/sbin/btrfsback-lite
-============================================================================================================================================================================
-			____ _  _ ____ _  _ ___  _    ____
-			|___  \/  |__| |\/| |__] |    |___ .
-			|___ _/\_ |  | |  | |    |___ |___ .
+    cat <<EOH
+=================================================================================
+BTRFS snapshot and replication script - btrfsback-lite
+=================================================================================
 
-btrfsback-lite --subvol / --local-dir /mnt/sda2/autosnap-test --daily-local 4 --remote-host 10.5.5.4 --remote-dir /mnt/sdb2/BACKUP/VPS-rootfs/autosnap-test --daily-remote 6
-
-============================================================================================================================================================================
-			____ ____ ____ _  _ ___ ____ ___
-			|    |__/ |  | |\ |  |  |__| |__] .
-			|___ |  \ |__| | \|  |  |  | |__] .
-
-0  23  * * *     root   /usr/local/sbin/btrfsback-lite --subvol / --local-dir /mnt/sda2/autosnap-test --daily-local 4 --remote-host 10.5.5.4 --remote-dir /mnt/sdb2/BACKUP/VPS-rootfs/autosnap-test --daily-remote 6 > /var/log/btrfsback-lite.log 2>&1
-
-=======================================================================================================================================================================================================================================================
-
-    Usage:
-        -s, --subvol		-Selected BTRFS subvolume for snapshot.
-        -l, --local-dir		-Location of snapshots.
-	-d, --daily-local	-Number of local daily snapshots.
-        -H, --remote-host	-Remote Host IP Address.
-	-r, --remote-dir	-Remote location of snapshots.
-	-D, --daily-remote      -Number of remote daily snapshots.
-        -h, --help		-This help.
-
+Usage:
+    -s, --subvol        Selected BTRFS subvolume for snapshot
+    -l, --local-dir     Location of snapshots
+    -d, --snap-local    Number of local daily snapshots to keep
+    -H, --remote-host   Remote Host IP Address
+    -r, --remote-dir    Remote location of snapshots
+    -D, --snap-remote   Number of remote daily snapshots to keep
+    -h, --help          This help message
 EOH
 }
 
-OPTS="$(getopt -o s:l:H:r:d:D:h -l subvol:,local-dir:,remote-host:,remote-dir:,daily-local:,daily-remote:,help -- "$@")"
-
+# ================================
+# Parse options
+# ================================
+OPTS="$(getopt -o s:l:H:r:d:D:h -l subvol:,local-dir:,remote-host:,remote-dir:,snap-local:,snap-remote:,help -- "$@")"
 eval set -- "$OPTS"
 
 while true; do
     case $1 in
-        -s|--subvol)
-            SUBVOL="${2}"; shift 2;;
-        -l|--local-dir)
-            BACKUP_DIR_LOCAL="${2}"; shift 2;;
-        -d|--daily-local)
-            SNAP_COUNT_LOCAL="${2}"; shift 2;;
-        -H|--remote-host)
-            REMOTE_HOST="${2}"; shift 2;;
-	-r|--remote-dir)
-            BACKUP_DIR_REMOTE="${2}"; shift 2;;
-        -D|--daily-remote)
-            SNAP_COUNT_REMOTE="${2}"; shift 2;;
-        -h|--help)
-            print_help; exit 0;;
-        --)
-            shift; break;;
-        *)
-            break;;
+        -s|--subvol) SUBVOL="$2"; shift 2;;
+        -l|--local-dir) BACKUP_DIR_LOCAL="$2"; shift 2;;
+        -d|--snap-local) SNAP_COUNT_LOCAL="$2"; shift 2;;
+        -H|--remote-host) REMOTE_HOST="$2"; shift 2;;
+        -r|--remote-dir) BACKUP_DIR_REMOTE="$2"; shift 2;;
+        -D|--snap-remote) SNAP_COUNT_REMOTE="$2"; shift 2;;
+        -h|--help) print_help; exit 0;;
+        --) shift; break;;
+        *) break;;
     esac
 done
 
+# ================================
+# Basic validation
+# ================================
+for var in SUBVOL BACKUP_DIR_LOCAL SNAP_COUNT_LOCAL REMOTE_HOST BACKUP_DIR_REMOTE SNAP_COUNT_REMOTE; do
+    if [[ -z "${!var}" ]]; then
+        echo "Missing required parameter: $var"
+        print_help
+        exit 1
+    fi
+done
 
-DATE_CURRENT=$(date +%Y-%m-%d)
-
-LOCAL_DAILY=$(date -d "${SNAP_COUNT_LOCAL} days ago" +%Y-%m-%d)
-REMOTE_DAILY=$(date -d "${SNAP_COUNT_REMOTE} days ago" +%Y-%m-%d)
-
+DATE_CURRENT=$(date +%Y-%m-%d_%H-%M-%S)
 HOSTNAME=$(hostname)
 
-# to E-mail report
-EMAIL="user@example.org"
+# ================================
+# Snapshot creation
+# ================================
+echo "========================================================================================"
+echo " Backup Started: $(date '+%Y-%m-%d %H:%M:%S')"
+echo " Subvol: $SUBVOL"
+echo "========================================================================================"
 
-echo =========================================================================
-echo " Backup Started..                                            " `date "+%Y-%m-%d %H:%M:%S"`
-echo " Subvol:" $SUBVOL
-echo =========================================================================
 sync
-btrfs subvolume snapshot -r $SUBVOL $BACKUP_DIR_LOCAL/$DATE_CURRENT
+btrfs subvolume snapshot -r "$SUBVOL" "$BACKUP_DIR_LOCAL/$DATE_CURRENT"
 
-echo Delete older snapshot local..
-btrfs subvolume delete $BACKUP_DIR_LOCAL/$LOCAL_DAILY
+# Delete older local snapshots
+echo "Deleting older local snapshots..."
+SNAPS_TO_DELETE=$(ls -1d "$BACKUP_DIR_LOCAL"/* 2>/dev/null | sort | head -n -"$SNAP_COUNT_LOCAL")
+if [[ -n "$SNAPS_TO_DELETE" ]]; then
+    echo "$SNAPS_TO_DELETE" | while read OLD; do
+        [[ -d "$OLD" ]] && btrfs subvolume delete "$OLD" 2>/dev/null
+    done
+fi
 
-echo Replikation to remote Host $REMOTE_HOST
+# ================================
+# Replication to remote
+# ================================
+echo "Replicating to remote host: $REMOTE_HOST"
 
-btrfs send -q $BACKUP_DIR_LOCAL/$DATE_CURRENT | pv | ssh $REMOTE_HOST btrfs receive -q $BACKUP_DIR_REMOTE | tail -1
+# First sync detection
+if ssh "$REMOTE_HOST" "[ -z \"\$(ls -A $BACKUP_DIR_REMOTE 2>/dev/null)\" ]"; then
+    echo "First sync detected - remote backup directory is empty."
+    btrfs send -q "$BACKUP_DIR_LOCAL/$DATE_CURRENT" | \
+        ssh "$REMOTE_HOST" btrfs receive -q "$BACKUP_DIR_REMOTE"
+else
+    PREV_SNAP=$(ssh "$REMOTE_HOST" "ls -1 $BACKUP_DIR_REMOTE 2>/dev/null | sort | tail -n 1")
+    if [[ -n "$PREV_SNAP" ]] && [[ -d "$BACKUP_DIR_LOCAL/$PREV_SNAP" ]]; then
+        echo "Incremental send: $PREV_SNAP -> $DATE_CURRENT"
+        btrfs send -q -p "$BACKUP_DIR_LOCAL/$PREV_SNAP" "$BACKUP_DIR_LOCAL/$DATE_CURRENT" | \
+            ssh "$REMOTE_HOST" btrfs receive -q "$BACKUP_DIR_REMOTE"
+    else
+        echo "No common snapshot on remote, performing full send..."
+        btrfs send -q "$BACKUP_DIR_LOCAL/$DATE_CURRENT" | \
+            ssh "$REMOTE_HOST" btrfs receive -q "$BACKUP_DIR_REMOTE"
+    fi
+fi
 
-echo Delete older snapshot on remote Host $REMOTE_HOST
-ssh $REMOTE_HOST btrfs subvolume delete $BACKUP_DIR_REMOTE/$REMOTE_DAILY
+# Delete older remote snapshots
+echo "Deleting older remote snapshots..."
+ssh "$REMOTE_HOST" "ls -1d $BACKUP_DIR_REMOTE/* 2>/dev/null | sort | head -n -$SNAP_COUNT_REMOTE | xargs -r -I {} btrfs subvolume delete {} 2>/dev/null"
 
+# ================================
+# End
+# ================================
+# List snapshots tree (no report) + accurate counts under it
+echo "---------------------------------------------------------------------------------------"
 echo " "
-echo " - LOCAL Backups:"
-tree -a -d -L 1 $BACKUP_DIR_LOCAL
-echo " "
-echo " - REMOTE Backups on $REMOTE_HOST:"
-ssh $REMOTE_HOST tree -a -d -L 1 $BACKUP_DIR_REMOTE
+echo "Local snapshots:"
+tree -d -L 1 --noreport "$BACKUP_DIR_LOCAL"
+LOCAL_COUNT=$(ls -1 "$BACKUP_DIR_LOCAL" 2>/dev/null | wc -l)
+echo "Local snapshot count: $LOCAL_COUNT / $SNAP_COUNT_LOCAL"
 
-echo _______________________________________________________________________________________________________________________ 
-echo
-echo " Backup End.                                                        " `date "+%Y-%m-%d %H:%M:%S"`
+echo "---------------------------------------------------------------------------------------"
+echo " "
+echo "Remote snapshots:"
+ssh "$REMOTE_HOST" "tree -d -L 1 --noreport \"$BACKUP_DIR_REMOTE\" 2>/dev/null || true"
+REMOTE_COUNT=$(ssh "$REMOTE_HOST" "ls -1 \"$BACKUP_DIR_REMOTE\" 2>/dev/null | wc -l")
+echo "Remote snapshot count: $REMOTE_COUNT / $SNAP_COUNT_REMOTE"
+echo " "
+echo "========================================================================================"
+echo " Backup End: $(date '+%Y-%m-%d %H:%M:%S')"
+echo "========================================================================================"
 echo " "
 echo " "
-
-# Send daily E-mail report
-#cat /var/log/btrfsback-lite.log | mail -s "BTRFS Snapshots and Replication daily E-Mail report." -a "From: $HOSTNAME@btrfsback-lite" $EMAIL
