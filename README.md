@@ -49,10 +49,11 @@ Typical use cases:
 ## Requirements
 
 ### System packages
+Run as root (sudo su - / sudo -i):
 
 ```bash
-sudo apt update
-sudo apt install -y coreutils tree bsd-mailx postfix pv gawk
+apt update
+apt install -y coreutils tree bsd-mailx postfix pv gawk
 ```
 
 Prerequisites
@@ -63,9 +64,9 @@ Pre-created destination directories
 
 ### Supported distributions:
 
-Ubuntu 22.04+
-Debian 11 / 12
-Any modern Linux with BTRFS support
+Ubuntu 20.04+
+Debian 11 / 12 / 13
+Any modern Linux with BTRFS support.
 
 Installation
 ```
