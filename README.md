@@ -30,13 +30,10 @@ Typical use cases:
 - Multi-volume backup orchestration
 
 ---
-![1](1.png)
-
-![2](2.png)
-
-![3](3.png)
-
-![4](4.png)
+<img src="img/1.png" width="600">
+<img src="img/2.png" width="600">
+<img src="img/3.png" width="600">
+<img src="img/4.png" width="600">
 ## Features
 
 | Feature | Description |
