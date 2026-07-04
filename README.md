@@ -86,21 +86,25 @@ Run the backup script with a selected profile:
 /usr/local/sbin/autosnaps-btrfsback-lite.sh --config /etc/btrfsback-lite.cfg YEARLY
 ```
 
-Configuration Structure
+## Configuration Structure
 
 Each profile (DAILY, WEEKLY, MONTHLY, YEARLY) defines its own variables using a common prefix pattern.
 
-Common Parameters
-*_BTRFSBACK_PATH – path to the backup script
-*_BTRFS_SUBVOL_ROOTFS – root filesystem subvolume
-*_CONTAINERS – LXD container directory
-*_LOCALDIR_* – local snapshot storage paths
-*_REMOTE_IP – remote backup host
-*_REMOTEDIR_* – remote storage directories
-*_LSNAP_* / *_RSNAP_* – retention for local/remote snapshots
-*_EMAIL – report email address
-*_EXCLUDE_CONTAINERS – space-separated list of excluded containers
-Example: DAILY Section
+### Common Parameters
+
+- `*_BTRFSBACK_PATH` – path to the backup script  
+- `*_BTRFS_SUBVOL_ROOTFS` – root filesystem subvolume  
+- `*_CONTAINERS` – LXD container directory  
+- `*_LOCALDIR_*` – local snapshot storage paths  
+- `*_REMOTE_IP` – remote backup host  
+- `*_REMOTEDIR_*` – remote storage directories  
+- `*_LSNAP_*` / `*_RSNAP_*` – retention for local/remote snapshots  
+- `*_EMAIL` – report email address  
+- `*_EXCLUDE_CONTAINERS` – space-separated list of excluded containers  
+
+### Example: DAILY Section
+
+```bash
 DAILY_LOCALDIR_ROOTFS="/mnt/sda3/.snapshots/ROOTFS-btrfsback/daily"
 DAILY_LOCALDIR_LXD="/mnt/sda3/.snapshots/LXD-btrfsback/daily"
 DAILY_REMOTE_IP="192.168.11.11"
@@ -111,11 +115,6 @@ DAILY_RSNAP_ROOTFS="7"
 DAILY_LSNAP_LXD="5"
 DAILY_RSNAP_LXD="7"
 DAILY_EMAIL="info@unixit.org"
-Notes
-Only defined sections are executed
-Scheduling is controlled via cron
-Retention values define how many snapshots are kept locally and remotely
-Container exclusions are space-separated
 
 <br></br>
 Cron Example
