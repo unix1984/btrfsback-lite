@@ -161,7 +161,7 @@ If this happens, please mark the email as “Not spam” or move it to the inbox
 # YEARLY snapshot - January 1st at 05:00
 0 5 1 1 * root /usr/local/sbin/autosnaps-btrfsback-lite.sh --config /etc/btrfsback-lite.cfg YEARLY
 ```
-
+<br></br>
 ### Log file
 
 Backup execution logs are written to the system log directory and can be inspected for debugging and verification purposes.
