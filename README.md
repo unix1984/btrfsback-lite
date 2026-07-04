@@ -91,8 +91,9 @@ This configuration file defines settings for BTRFS snapshot creation and remote 
 
 Edit the config using a terminal editor:
 ```
-nano /root/btrfsback-lite.cfg
-vim /root/btrfsback-lite.cfg
+vim /etc/btrfsback-lite.cfg
+or
+nano /etc/btrfsback-lite.cfg
 ```
 Run the backup script with a selected profile:
 ```
