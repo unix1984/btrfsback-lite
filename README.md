@@ -206,6 +206,8 @@ Maintenance & monitoring: Ongoing management, regular health checks, and priorit
 For business inquiries and quotes, please contact:
 
 Matyi Szabolcs
+
+
 ipconnect.mail@gmail.com
 <br></br>
 ### License
