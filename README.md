@@ -130,16 +130,20 @@ Each profile (DAILY, WEEKLY, MONTHLY, YEARLY) defines its own variables using a 
 ### ⓘ Example: DAILY Section
 
 ```
-DAILY_LOCALDIR_ROOTFS="/mnt/sda3/.snapshots/ROOTFS-btrfsback/daily"
-DAILY_LOCALDIR_LXD="/mnt/sda3/.snapshots/LXD-btrfsback/daily"
-DAILY_REMOTE_IP="192.168.11.11"
-DAILY_REMOTEDIR_ROOTFS="/mnt/NVME-128G/BACKUP/VPS-ROOT/daily"
-DAILY_REMOTEDIR_LXD="/mnt/NVME-128G/BACKUP/VPS-LXD/daily"
-DAILY_LSNAP_ROOTFS="5"
-DAILY_RSNAP_ROOTFS="7"
-DAILY_LSNAP_LXD="5"
-DAILY_RSNAP_LXD="7"
-DAILY_EMAIL="unixit.mail@gmail.com"
+DAILY_BTRFSBACK_PATH="/usr/local/sbin/btrfsback-lite"         # Path to the btrfsback-lite script
+DAILY_BTRFS_SUBVOL_ROOTFS="/"                                 # Path to the rootfs subvol
+DAILY_CONTAINERS="/mnt/sda3/LXD/containers"                   # Root folder for LXD containers
+DAILY_LOCALDIR_LXD="/mnt/sda3/.snapshots/LXD-btrfsback/daily"               # Local folder to store daily container snapshots
+DAILY_LOCALDIR_ROOTFS="/mnt/sda3/.snapshots/ROOTFS-btrfsback/daily"    # Local folder to store daily rootfs snapshots
+DAILY_REMOTE_IP="192.168.11.11"                                # Remote host IP address
+DAILY_REMOTEDIR_ROOTFS="/mnt/NVME-128G/BACKUP/VPS-ROOT/daily"  # Remote folder for rootfs snapshots
+DAILY_REMOTEDIR_LXD="/mnt/NVME-128G/BACKUP/VPS-LXD/daily"      # Remote folder for container snapshots
+DAILY_LSNAP_ROOTFS="5"                                        # Number of local rootfs snapshots to keep
+DAILY_RSNAP_ROOTFS="7"                                        # Number of remote rootfs snapshots to keep
+DAILY_LSNAP_LXD="5"                                           # Number of local container snapshots to keep
+DAILY_RSNAP_LXD="7"                                           # Number of remote container snapshots to keep
+DAILY_EMAIL="unixit.mail@gmail.com"                                 # Email address for daily reports
+DAILY_EXCLUDE_CONTAINERS="testct container2"                  # Exclude containers from backup
 ```
 
 ### ✉ Email delivery notice
