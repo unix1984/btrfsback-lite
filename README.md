@@ -88,7 +88,6 @@ wget -O /usr/local/sbin/btrfsback-lite https://raw.githubusercontent.com/unix198
 ### Manual Usage
 This configuration file defines settings for BTRFS snapshot creation and remote replication. It supports four execution profiles: DAILY, WEEKLY, MONTHLY, YEARLY.
 <br></br>
-###Open the file
 
 Edit the config using a terminal editor:
 ```
@@ -133,6 +132,12 @@ DAILY_LSNAP_LXD="5"
 DAILY_RSNAP_LXD="7"
 DAILY_EMAIL="info@unixit.org"
 ```
+
+Email delivery notice
+
+The first email report may occasionally be delivered to the Spam / Junk folder depending on the recipient’s mail provider.
+
+If this happens, please mark the email as “Not spam” or move it to the inbox. This helps improve future delivery and ensures subsequent reports arrive correctly in the inbox.
 <br></br>
 ### Cron Example
 ```
