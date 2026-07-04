@@ -23,9 +23,6 @@ Perfect for automated production snapshotting and offsite replication of root fi
 
 ## 🛠️ Infrastructure Requirements
 
-### 1. System Packages
-```bash
-sudo apt update && sudo apt install -y coreutils tree bsd-mailx postfix pv gawk lolcat
 2. Prerequisites
 SSH Keys: Passwordless SSH key authentication must be actively deployed to the destination backup target.
 
@@ -38,12 +35,12 @@ Validated environments: Ubuntu 22.04 LTS, Debian 11/12 (Bookworm). Works seamles
 Handles local snapshot aging policies and orchestrates secure, encrypted offsite transfers.
 
 Install
-Bash
-sudo wget -O /usr/local/sbin/btrfsback-lite [https://raw.githubusercontent.com/unix1984/btrfsback-lite/main/btrfsback-lite](https://raw.githubusercontent.com/unix1984/btrfsback-lite/main/btrfsback-lite)
-sudo chmod +x /usr/local/sbin/btrfsback-lite
+
+wget -O /usr/local/sbin/btrfsback-lite [https://raw.githubusercontent.com/unix1984/btrfsback-lite/main/btrfsback-lite](https://raw.githubusercontent.com/unix1984/btrfsback-lite/main/btrfsback-lite)
+chmod +x /usr/local/sbin/btrfsback-lite
 Deploy system configuration profile
-Bash
-sudo wget -O /etc/btrfsback-lite.cfg [https://raw.githubusercontent.com/unix1984/btrfsback-lite/main/btrfsback-lite.cfg](https://raw.githubusercontent.com/unix1984/btrfsback-lite/main/btrfsback-lite.cfg)
+
+wget -O /etc/btrfsback-lite.cfg [https://raw.githubusercontent.com/unix1984/btrfsback-lite/main/btrfsback-lite.cfg](https://raw.githubusercontent.com/unix1984/btrfsback-lite/main/btrfsback-lite.cfg)
 CLI Reference
 Plaintext
 Options:
@@ -54,17 +51,19 @@ Options:
   -r, --remote-dir    Remote retention directory path
   -D, --daily-remote  Maximum remote daily snapshots to retain
   -h, --help          Show this manual
+
+
 Manual Run Example
-Bash
+
 btrfsback-lite --subvol / --local-dir /mnt/sda2/autosnap-test --daily-local 4 --remote-host 10.5.5.4 --remote-dir /mnt/sdb2/BACKUP/VPS-rootfs/autosnap-test --daily-remote 6
 Single Subvolume Cron Configuration (/etc/cron.d/btrfsback-lite)
-Kódrészlet
+
 0 23 * * * root /usr/local/sbin/btrfsback-lite --subvol / --local-dir /mnt/sda2/autosnap-test --daily-local 4 --remote-host 10.5.5.4 --remote-dir /mnt/sdb2/BACKUP/VPS-rootfs/autosnap-test --daily-remote 6 > /var/log/btrfsback-lite.log 2>&1
 2. Multi-Volume Orchestration (Automation Wrapper)
 To execute continuous batch updates across several dynamic mountpoints (e.g. isolated LXD nodes) matching strict retention schedules, use the master orchestration runner with your central config profile.
 
 Production Automation Cron (/etc/crontab or /etc/cron.d/btrfsback-lite-schedule)
-Kódrészlet
+
 # BTRFS autosnap and replication scheduling.
 # DAILY snapshot - every day at 01:00
 0 1 * * * root /usr/local/sbin/autosnaps-btrfsback-lite.sh --config /etc/btrfsback-lite.cfg DAILY
@@ -82,6 +81,13 @@ Bash
 /usr/local/sbin/btrfsback-lite --subvol /mnt/sda3/containers/container1 --local-dir /mnt/sda3/autosnap-btrfsback/daily/container1 --daily-local 10 --remote-host 10.5.5.4 --remote-dir /mnt/rootfs/BACKUP-VPS/LXD/daily/container1 --daily-remote 15
 /usr/local/sbin/btrfsback-lite --subvol /mnt/sda3/containers/container2 --local-dir /mnt/sda3/autosnap-btrfsback/daily/container2 --daily-local 10 --remote-host 10.5.5.4 --remote-dir /mnt/rootfs/BACKUP-VPS/LXD/daily/container2 --daily-remote 15
 /usr/local/sbin/btrfsback-lite --subvol /mnt/sda3/containers/container3 --local-dir /mnt/sda3/autosnap-btrfsback/daily/container3 --daily-local 10 --remote-host 10.5.5.4 --remote-dir /mnt/rootfs/BACKUP-VPS/LXD/daily/container3 --daily-remote 15
+
+
+### 1. System Packages
+```bash
+sudo apt update && sudo apt install -y coreutils tree bsd-mailx postfix pv gawk lolcat
+
+
 # btrlb
 Btrlb is a mini version that only rotates **local backups** with snapshots without replication.
 
