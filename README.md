@@ -196,7 +196,20 @@ btrlb --subvol / --local-dir /mnt/sda2/autosnap-test --daily-local 10
 <br></br>
 <br></br>
 <br></br>
+### Commercial Support
+If you need professional assistance with setting up reliable Btrfs backup strategies in your production environment, corporate services are available.
 
-License
+Services include:
 
+One-time implementation & consultation: Custom deployment and integration tailored to your infrastructure, billed at an hourly rate.
+
+Maintenance & monitoring: Ongoing management, regular health checks, and priority support for a flat monthly fee.
+
+For business inquiries and quotes, please contact:
+
+Matyi Szabolcs
+ipconnect.mail@gmail.com
+<br></br>
+### License
+<br></br>
 MIT
