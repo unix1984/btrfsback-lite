@@ -54,7 +54,7 @@ Typical use cases:
 | Monitoring ready | Hooks for Nagios / Zabbix |
 
 ---
-Prerequisites
+### Prerequisites
 - BTRFS filesystem
 - btrfs-progs installed
 - Passwordless SSH access to backup host
