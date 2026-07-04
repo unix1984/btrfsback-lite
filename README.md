@@ -144,17 +144,17 @@ You can backup containers individually using the following commands:
 ## btrlb (Local-only version, no replication.)
 
 Lightweight tool for local snapshot rotation only (no replication).
-
+<br></br>
 ### Install
 ```
-wget -O /usr/local/sbin/btrlb https://raw.githubusercontent.com/unix1984/btrfs/main/btrlb
-chmod +x /usr/local/sbin/btrlb
+wget -O /usr/local/sbin/btrlb https://raw.githubusercontent.com/unix1984/btrfs/main/btrlb && chmod +x /usr/local/sbin/btrlb
 ```
+<br></br>
 ### Example
 ```
 btrlb --subvol / --local-dir /mnt/sda2/autosnap-test --daily-local 10
 ```
-
+<br></br>
 ### Cron
 ```
 0 23 * * * root /usr/local/sbin/btrlb \
