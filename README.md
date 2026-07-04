@@ -51,7 +51,7 @@ Typical use cases:
 ### Supported distributions:
 
 - Ubuntu 20.04+
-- Debian 11 / 12 / 13
+- Debian 11 / 12 / 13+
 - Any modern Linux distributions with BTRFS support.
 
 ### System packages
