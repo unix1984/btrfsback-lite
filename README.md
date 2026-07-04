@@ -171,7 +171,7 @@ To view a specific backup run log:
 cat /var/log/btrfsback-lite-2026-06-03_01-00-01.log
 ```
 <br></br>
-### Alternative Usage (No Config File)
+## Alternative Usage (No Config File)
 Alternatively, the **btrfsback-lite** script can be executed directly from the command line without using a configuration file. This approach is completely independent of LXD, allowing you to back up any arbitrary Btrfs subvolume individually:
 ```
 /usr/local/sbin/btrfsback-lite --subvol /mnt/sda3/containers/container1 --local-dir /mnt/sda3/autosnap/container1 --daily-local 10 --remote-host 10.5.5.4 --remote-dir /backup/container1 --daily-remote 15
