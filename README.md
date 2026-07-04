@@ -69,7 +69,7 @@ Typical use cases:
 - Pre-created destination directories
 <br></br>
 
-## Requirements
+## 📋 Requirements
 
 ### Supported distributions:
 
@@ -200,7 +200,7 @@ Lightweight tool for local snapshot rotation only (no replication).
 wget -O /usr/local/sbin/btrlb https://raw.githubusercontent.com/unix1984/btrfs/main/btrlb && chmod +x /usr/local/sbin/btrlb
 ```
 <br></br>
-### Example
+### ▶ Example
 ```
 btrlb --subvol / --local-dir /mnt/sda2/autosnap-test --daily-local 10
 ```
@@ -231,6 +231,6 @@ unixit.mail@gmail.com
 </pre>
 
 <br></br>
-### License
+### © License
 
 MIT
