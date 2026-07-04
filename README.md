@@ -52,7 +52,7 @@ Typical use cases:
 
 - Ubuntu 20.04+
 - Debian 11 / 12 / 13
-- Any modern Linux with BTRFS support.
+- Any modern Linux distributions with BTRFS support.
 
 ### System packages
 Run as root (sudo su - / sudo -i):
