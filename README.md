@@ -56,17 +56,17 @@ apt update
 apt install -y coreutils tree bsd-mailx postfix pv gawk
 ```
 
-Prerequisites
-BTRFS filesystem
-btrfs-progs installed
-Passwordless SSH access to backup host
-Pre-created destination directories
+- Prerequisites
+- BTRFS filesystem
+- btrfs-progs installed
+- Passwordless SSH access to backup host
+- Pre-created destination directories
 
 ### Supported distributions:
 
-Ubuntu 20.04+
-Debian 11 / 12 / 13
-Any modern Linux with BTRFS support.
+- Ubuntu 20.04+
+- Debian 11 / 12 / 13
+- Any modern Linux with BTRFS support.
 
 Installation
 ```
