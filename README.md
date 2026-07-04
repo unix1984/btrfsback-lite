@@ -61,22 +61,15 @@ btrfs-progs installed
 Passwordless SSH access to backup host
 Pre-created destination directories
 
-Supported distributions:
+### Supported distributions:
 
 Ubuntu 22.04+
 Debian 11 / 12
 Any modern Linux with BTRFS support
 
 Installation
-Install binary
 ```
-wget -O /usr/local/sbin/btrfsback-lite https://raw.githubusercontent.com/unix1984/btrfsback-lite/main/btrfsback-lite
-sudo chmod +x /usr/local/sbin/btrfsback-lite
-```
-
-Install configuration
-```
-wget -O /etc/btrfsback-lite.cfg https://raw.githubusercontent.com/unix1984/btrfsback-lite/main/btrfsback-lite.cfg
+wget -O /usr/local/sbin/btrfsback-lite https://raw.githubusercontent.com/unix1984/btrfsback-lite/main/btrfsback-lite && wget -O /usr/local/sbin/autosnaps-btrfsback-lite.sh https://raw.githubusercontent.com/unix1984/btrfsback-lite/refs/heads/main/autosnaps-btrfsback-lite.sh && wget -O /etc/btrfsback-lite.cfg https://raw.githubusercontent.com/unix1984/btrfsback-lite/main/btrfsback-lite.cfg && chmod +x /usr/local/sbin/btrfsback-lite /usr/local/sbin/autosnaps-btrfsback-lite.sh
 ```
 
 CLI Reference
@@ -89,6 +82,7 @@ CLI Reference
 -D, --daily-remote   Number of remote snapshots to keep
 -h, --help           Show help
 ```
+
 Manual Usage
 ```
 btrfsback-lite \
@@ -126,7 +120,7 @@ Central Configuration
 /usr/local/sbin/btrfsback-lite --subvol /mnt/sda3/containers/container3 --local-dir /mnt/sda3/autosnap/container3 --daily-local 10 --remote-host 10.5.5.4 --remote-dir /backup/container3 --daily-remote 15
 ```
 
-btrlb (Local-only version)
+## btrlb (Local-only version, no replication.)
 
 Lightweight tool for local snapshot rotation only (no replication).
 
