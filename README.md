@@ -41,8 +41,8 @@ Install
 Bash
 sudo wget -O /usr/local/sbin/btrfsback-lite [https://raw.githubusercontent.com/unix1984/btrfsback-lite/main/btrfsback-lite](https://raw.githubusercontent.com/unix1984/btrfsback-lite/main/btrfsback-lite)
 sudo chmod +x /usr/local/sbin/btrfsback-lite
-
-# Deploy system configuration profile
+Deploy system configuration profile
+Bash
 sudo wget -O /etc/btrfsback-lite.cfg [https://raw.githubusercontent.com/unix1984/btrfsback-lite/main/btrfsback-lite.cfg](https://raw.githubusercontent.com/unix1984/btrfsback-lite/main/btrfsback-lite.cfg)
 CLI Reference
 Plaintext
@@ -57,11 +57,11 @@ Options:
 Manual Run Example
 Bash
 btrfsback-lite --subvol / --local-dir /mnt/sda2/autosnap-test --daily-local 4 --remote-host 10.5.5.4 --remote-dir /mnt/sdb2/BACKUP/VPS-rootfs/autosnap-test --daily-remote 6
-Standard Crontab Integration (/etc/cron.d/btrfsback-lite)
+Single Subvolume Cron Configuration (/etc/cron.d/btrfsback-lite)
 Kódrészlet
 0 23 * * * root /usr/local/sbin/btrfsback-lite --subvol / --local-dir /mnt/sda2/autosnap-test --daily-local 4 --remote-host 10.5.5.4 --remote-dir /mnt/sdb2/BACKUP/VPS-rootfs/autosnap-test --daily-remote 6 > /var/log/btrfsback-lite.log 2>&1
 2. Multi-Volume Orchestration (Automation Wrapper)
-To execute continuous batch updates across several dynamic mountpoints (e.g. 10+ isolated LXD nodes) matching strict retention schedules, use the master orchestration runner with your central config profile.
+To execute continuous batch updates across several dynamic mountpoints (e.g. isolated LXD nodes) matching strict retention schedules, use the master orchestration runner with your central config profile.
 
 Production Automation Cron (/etc/crontab or /etc/cron.d/btrfsback-lite-schedule)
 Kódrészlet
@@ -82,7 +82,6 @@ Bash
 /usr/local/sbin/btrfsback-lite --subvol /mnt/sda3/containers/container1 --local-dir /mnt/sda3/autosnap-btrfsback/daily/container1 --daily-local 10 --remote-host 10.5.5.4 --remote-dir /mnt/rootfs/BACKUP-VPS/LXD/daily/container1 --daily-remote 15
 /usr/local/sbin/btrfsback-lite --subvol /mnt/sda3/containers/container2 --local-dir /mnt/sda3/autosnap-btrfsback/daily/container2 --daily-local 10 --remote-host 10.5.5.4 --remote-dir /mnt/rootfs/BACKUP-VPS/LXD/daily/container2 --daily-remote 15
 /usr/local/sbin/btrfsback-lite --subvol /mnt/sda3/containers/container3 --local-dir /mnt/sda3/autosnap-btrfsback/daily/container3 --daily-local 10 --remote-host 10.5.5.4 --remote-dir /mnt/rootfs/BACKUP-VPS/LXD/daily/container3 --daily-remote 15
-
 # btrlb
 Btrlb is a mini version that only rotates **local backups** with snapshots without replication.
 
