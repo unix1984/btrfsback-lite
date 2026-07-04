@@ -57,7 +57,7 @@ Typical use cases:
 ### Prerequisites
 - BTRFS filesystem
 - btrfs-progs installed
-- Passwordless SSH access to backup host
+- Passwordless SSH access to backup host (even with VPN)
 - Pre-created destination directories
 <br></br>
 
