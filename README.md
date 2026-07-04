@@ -75,27 +75,48 @@ Installation - btrfsback-lite
 wget -O /usr/local/sbin/btrfsback-lite https://raw.githubusercontent.com/unix1984/btrfsback-lite/main/btrfsback-lite && wget -O /usr/local/sbin/autosnaps-btrfsback-lite.sh https://raw.githubusercontent.com/unix1984/btrfsback-lite/refs/heads/main/autosnaps-btrfsback-lite.sh && wget -O /etc/btrfsback-lite.cfg https://raw.githubusercontent.com/unix1984/btrfsback-lite/main/btrfsback-lite.cfg && chmod +x /usr/local/sbin/btrfsback-lite /usr/local/sbin/autosnaps-btrfsback-lite.sh
 ```
 <br></br>
-CLI Reference
-```
-$ btrfsback-lite -h
-=================================================================================
-BTRFS snapshot and replication script - btrfsback-lite
-=================================================================================
 
-Usage:
-    -s, --subvol        Selected BTRFS subvolume for snapshot
-    -l, --local-dir     Location of snapshots
-    -d, --snap-local    Number of local daily snapshots to keep
-    -H, --remote-host   Remote Host IP Address
-    -r, --remote-dir    Remote location of snapshots
-    -D, --snap-remote   Number of remote daily snapshots to keep
-    -h, --help          This help message
-```
-<br></br>
 Manual Usage
+This configuration file defines settings for BTRFS snapshot creation and remote replication. It supports four execution profiles: DAILY, WEEKLY, MONTHLY, YEARLY.
+Run the backup script with a selected profile:
 ```
-btrfsback-lite --subvol / --local-dir /mnt/sda2/autosnap-test --daily-local 4 --remote-host 10.5.5.4 --remote-dir /mnt/sdb2/BACKUP/VPS-rootfs/autosnap-test --daily-remote 6
+/usr/local/sbin/autosnaps-btrfsback-lite.sh --config /etc/btrfsback-lite.cfg DAILY
+/usr/local/sbin/autosnaps-btrfsback-lite.sh --config /etc/btrfsback-lite.cfg WEEKLY
+/usr/local/sbin/autosnaps-btrfsback-lite.sh --config /etc/btrfsback-lite.cfg MONTHLY
+/usr/local/sbin/autosnaps-btrfsback-lite.sh --config /etc/btrfsback-lite.cfg YEARLY
 ```
+
+Configuration Structure
+
+Each profile (DAILY, WEEKLY, MONTHLY, YEARLY) defines its own variables using a common prefix pattern.
+
+Common Parameters
+*_BTRFSBACK_PATH – path to the backup script
+*_BTRFS_SUBVOL_ROOTFS – root filesystem subvolume
+*_CONTAINERS – LXD container directory
+*_LOCALDIR_* – local snapshot storage paths
+*_REMOTE_IP – remote backup host
+*_REMOTEDIR_* – remote storage directories
+*_LSNAP_* / *_RSNAP_* – retention for local/remote snapshots
+*_EMAIL – report email address
+*_EXCLUDE_CONTAINERS – space-separated list of excluded containers
+Example: DAILY Section
+DAILY_LOCALDIR_ROOTFS="/mnt/sda3/.snapshots/ROOTFS-btrfsback/daily"
+DAILY_LOCALDIR_LXD="/mnt/sda3/.snapshots/LXD-btrfsback/daily"
+DAILY_REMOTE_IP="192.168.11.11"
+DAILY_REMOTEDIR_ROOTFS="/mnt/NVME-128G/BACKUP/VPS-ROOT/daily"
+DAILY_REMOTEDIR_LXD="/mnt/NVME-128G/BACKUP/VPS-LXD/daily"
+DAILY_LSNAP_ROOTFS="5"
+DAILY_RSNAP_ROOTFS="7"
+DAILY_LSNAP_LXD="5"
+DAILY_RSNAP_LXD="7"
+DAILY_EMAIL="info@unixit.org"
+Notes
+Only defined sections are executed
+Scheduling is controlled via cron
+Retention values define how many snapshots are kept locally and remotely
+Container exclusions are space-separated
+
 <br></br>
 Cron Example
 ```
