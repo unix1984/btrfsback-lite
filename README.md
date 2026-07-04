@@ -104,7 +104,7 @@ Each profile (DAILY, WEEKLY, MONTHLY, YEARLY) defines its own variables using a 
 
 ### Example: DAILY Section
 
-```bash
+```
 DAILY_LOCALDIR_ROOTFS="/mnt/sda3/.snapshots/ROOTFS-btrfsback/daily"
 DAILY_LOCALDIR_LXD="/mnt/sda3/.snapshots/LXD-btrfsback/daily"
 DAILY_REMOTE_IP="192.168.11.11"
@@ -115,7 +115,7 @@ DAILY_RSNAP_ROOTFS="7"
 DAILY_LSNAP_LXD="5"
 DAILY_RSNAP_LXD="7"
 DAILY_EMAIL="info@unixit.org"
-
+```
 <br></br>
 Cron Example
 ```
