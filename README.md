@@ -194,8 +194,6 @@ btrlb --subvol / --local-dir /mnt/sda2/autosnap-test --daily-local 10
 <br></br>
 <br></br>
 <br></br>
-<br></br>
-<br></br>
 ### Commercial Support
 If you need professional assistance with setting up reliable Btrfs backup strategies in your production environment, corporate services are available.
 
