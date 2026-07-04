@@ -140,7 +140,7 @@ DAILY_LSNAP_ROOTFS="5"
 DAILY_RSNAP_ROOTFS="7"
 DAILY_LSNAP_LXD="5"
 DAILY_RSNAP_LXD="7"
-DAILY_EMAIL="info@unixit.org"
+DAILY_EMAIL="unixit.mail@gmail.com"
 ```
 
 ### Email delivery notice
