@@ -177,13 +177,13 @@ To view a specific backup run log:
 cat /var/log/btrfsback-lite-2026-06-03_01-00-01.log
 ```
 
-# Nagios / Icinga Plugin for btrfsback-lite
+## Nagios / Icinga Plugin for btrfsback-lite
 
 A bulletproof Bash monitoring script designed to track the health and freshness of both local and remote BTRFS snapshots created by the `btrfsback-lite` backup framework.
 <img src="img/nagios-check_btrfsback-lite.png" width="800">
 Instead of relying on filesystem modification times (which can be easily skewed by manual directory access or maintenance tasks), this plugin parses the actual date-based naming pattern (`YYYY-MM-DD_HH-MM-SS`) of the BTRFS snapshot subvolumes.
 
-## Features
+### Features
 
 - **Automated Configuration Discovery:** Dynamically reads directories, remote targets, exclusions, and variables straight from your `/root/btrfsback-lite.cfg`.
 - **Comprehensive Scans:** Checks both **ROOTFS** and **every active LXD container** individually (automatically ignoring specified exclusions).
@@ -197,6 +197,40 @@ Instead of relying on filesystem modification times (which can be easily skewed 
 ```
 wget -O /usr/local/sbin/nagios-check_btrfsback-lite.sh https://raw.githubusercontent.com/unix1984/btrfsback-lite/refs/heads/main/nagios-check_btrfsback-lite.sh && chmod +x /usr/local/sbin/nagios-check_btrfsback-lite.sh
 ```
+
+### Configure NRPE (or NCPA)
+Since the script needs read access to /root/btrfsback-lite.cfg and utilizes root SSH keys to inspect the remote storage target, append the following line to your /etc/nagios/nrpe.cfg to run it safely via sudo:
+
+```
+command[check_btrfs_backup]=/usr/bin/sudo /usr/local/sbin/nagios-check_btrfsback-lite.sh
+```
+Grant execution permissions to the nagios system user by editing /etc/sudoers (or creating a file inside /etc/sudoers.d/):
+
+```
+nagios ALL=(ALL) NOPASSWD: /usr/local/sbin/nagios-check_btrfsback-lite.sh
+```
+
+### Define the Core Nagios Service
+Add this service definition block to your primary Nagios infrastructure configuration:
+
+```
+define service {
+    use                     generic-service
+    host_name               your-cloud-vps
+    service_description     BTRFS Backup Integrity - Local & Remote
+    check_command           check_nrpe!check_btrfs_backup
+}
+```
+
+###Threshold Rules
+The script applies standard scheduling assumptions tailored for daily setups:
+
+OK: Latest verified snapshot structure is younger than 26 hours.
+
+WARNING: Last snapshot found is between 26 and 48 hours old (backup job delayed or skipped).
+
+CRITICAL: Snapshot age exceeds 48 hours, or data is entirely missing/host unreachable.
+
 <br></br>
 ## ↪️ Alternative Usage (No Config File)
 Alternatively, the **btrfsback-lite** script can be executed directly from the command line without using a configuration file. This approach is completely independent of LXD, allowing you to back up any arbitrary Btrfs subvolume individually:
