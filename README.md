@@ -277,7 +277,7 @@ btrlb --subvol / --local-dir /mnt/sda2/autosnap-test --daily-local 10
 <br></br>
 ### ⏱️ Cron
 ```
-30 23 * * * root /usr/local/sbin/btrlb --subvol / --local-dir /mnt/sda2/autosnap-test --daily-local 10 > /var/log/btrlb.log 2>&1
+30 23 * * * root /usr/local/sbin/btrlb --subvol / --local-dir /mnt/rootfs/snapshots/rootfs --daily-local 10
 ```
 <br></br>
 <br></br>
