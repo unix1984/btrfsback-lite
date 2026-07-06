@@ -272,7 +272,7 @@ wget -O /usr/local/sbin/btrlb https://raw.githubusercontent.com/unix1984/btrfs/m
 ```
 btrlb --subvol / --local-dir /mnt/sda2/autosnap-test --daily-local 10
 ```
-<img src="img/btrlb-example.png" width="800">
+<img src="img/btrlb.example.png" width="800">
 
 <br></br>
 ### ⏱️ Cron
