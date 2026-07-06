@@ -186,7 +186,7 @@ Instead of relying on filesystem modification times (which can be easily skewed 
 
 ### Features
 
-- **Automated Configuration Discovery:** Dynamically reads directories, remote targets, exclusions, and variables straight from your `/root/btrfsback-lite.cfg`.
+- **Automated Configuration Discovery:** Dynamically reads directories, remote targets, exclusions, and variables straight from your `/etc/btrfsback-lite.cfg`.
 - **Comprehensive Scans:** Checks both **ROOTFS** and **every active LXD container** individually (automatically ignoring specified exclusions).
 - **Dual-Layer Protection:** Verifies snapshot presence and threshold age both on the local machine and the remote backup server via automated SSH checks.
 - **Detailed Output:** Displays precise snapshot stamps per container and component directly in Nagios, making troubleshooting a breeze.
