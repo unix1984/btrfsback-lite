@@ -180,7 +180,7 @@ cat /var/log/btrfsback-lite-2026-06-03_01-00-01.log
 # Nagios / Icinga Plugin for btrfsback-lite
 
 A bulletproof Bash monitoring script designed to track the health and freshness of both local and remote BTRFS snapshots created by the `btrfsback-lite` backup framework.
-
+<img src="img/nagios-check_btrfsback-lite.png" width="800">
 Instead of relying on filesystem modification times (which can be easily skewed by manual directory access or maintenance tasks), this plugin parses the actual date-based naming pattern (`YYYY-MM-DD_HH-MM-SS`) of the BTRFS snapshot subvolumes.
 
 ## Features
