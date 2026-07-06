@@ -233,6 +233,7 @@ WARNING: Last snapshot found is between 26 and 48 hours old (backup job delayed 
 CRITICAL: Snapshot age exceeds 48 hours, or data is entirely missing/host unreachable.
 
 <br></br>
+---
 ## ↪️ Alternative Usage (No Config File)
 Alternatively, the **btrfsback-lite** script can be executed directly from the command line without using a configuration file. This approach is completely independent of LXD, allowing you to back up any arbitrary Btrfs subvolume individually:
 ```
