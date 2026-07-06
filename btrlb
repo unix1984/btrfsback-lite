@@ -1,13 +1,15 @@
 #!/bin/bash
-exec 1> /var/log/btrlb.log 2>&1
-#set -xv
+
+# Timestamp for the log file name (e.g., /var/log/btrlb_2026-07-06_13-18-16.log)
+LOG_DATE=$(date +%Y-%m-%d_%H-%M-%S)
+exec 1>> "/var/log/btrlb_${LOG_DATE}.log" 2>&1
 
 # Check dependencies
-readonly DEPS=("date" "tree" "mail" "postfix" "pv" "awk")
+readonly DEPS=("date" "tree" "mail" "postfix" "pv" "awk" "btrfs")
 
 for dep in "${DEPS[@]}"; do
     if ! type -P "${dep}" &> /dev/null; then
-        echo -e "Command not found: ${dep}"
+        echo "Command not found: ${dep}"
         dep_exit=1
     fi
 done
@@ -16,48 +18,20 @@ if [[ "${dep_exit}" -eq 1 ]]; then
     exit 1
 fi
 
-
 print_help() {
     /usr/bin/cat << EOH
 ==========================================================================================================
-██████╗ ████████╗██████╗ ██╗     ██████╗ 
-██╔══██╗╚══██╔══╝██╔══██╗██║     ██╔══██╗
-██████╔╝   ██║   ██████╔╝██║     ██████╔╝
-██╔══██╗   ██║   ██╔══██╗██║     ██╔══██╗
-██████╔╝   ██║   ██║  ██║███████╗██████╔╝
-╚═════╝    ╚═╝   ╚═╝  ╚═╝╚══════╝╚═════╝ 
-                                         
+This is a lightweight BTRFS local only snapshot script in BASH. v1.3
 ==========================================================================================================
-This is a lightweight BTRFS local only snapshot script in BASH. v1.0
-============================================================================================================================================================================
-Install: wget -O /usr/local/sbin/btrlb https://raw.githubusercontent.com/unix1984/btrfs/main/btrlb && chmod +x /usr/local/sbin/btrlb
-============================================================================================================================================================================
-			____ _  _ ____ _  _ ___  _    ____
-			|___  \/  |__| |\/| |__] |    |___ .
-			|___ _/\_ |  | |  | |    |___ |___ .
-
-btrlb --subvol / --local-dir /mnt/sda2/autosnap-test --daily-local 10
-
-============================================================================================================================================================================
-			____ ____ ____ _  _ ___ ____ ___
-			|    |__/ |  | |\ |  |  |__| |__] .
-			|___ |  \ |__| | \|  |  |  | |__] .
-
-0  23  * * *     root   /usr/local/sbin/btrlb --subvol / --local-dir /mnt/sda2/autosnap-test --daily-local 4 > /var/log/btrlb.log 2>&1
-
-============================================================================================================================================================================
-
-    Usage:
-        -s, --subvol		-Selected BTRFS subvolume for snapshot.
-        -l, --local-dir		-Location of snapshots.
-	-d, --daily-local	-Number of local daily snapshots.
-        -h, --help		-This help.
-
+Usage:
+    -s, --subvol        -Selected BTRFS subvolume for snapshot.
+    -l, --local-dir     -Location of snapshots.
+    -d, --daily-local   -Number of local daily snapshots to keep.
+    -h, --help          -This help.
 EOH
 }
 
-OPTS="$(getopt -o s:l:H:r:d:D:h -l subvol:,local-dir:,remote-host:,remote-dir:,daily-local:,daily-remote:,help -- "$@")"
-
+OPTS="$(getopt -o s:l:d:h -l subvol:,local-dir:,daily-local:,help -- "$@")"
 eval set -- "$OPTS"
 
 while true; do
@@ -68,12 +42,6 @@ while true; do
             BACKUP_DIR_LOCAL="${2}"; shift 2;;
         -d|--daily-local)
             SNAP_COUNT_LOCAL="${2}"; shift 2;;
-        -H|--remote-host)
-            REMOTE_HOST="${2}"; shift 2;;
-	-r|--remote-dir)
-            BACKUP_DIR_REMOTE="${2}"; shift 2;;
-        -D|--daily-remote)
-            SNAP_COUNT_REMOTE="${2}"; shift 2;;
         -h|--help)
             print_help; exit 0;;
         --)
@@ -83,36 +51,54 @@ while true; do
     esac
 done
 
+if [ -z "$SUBVOL" ] || [ -z "$BACKUP_DIR_LOCAL" ] || [ -z "$SNAP_COUNT_LOCAL" ]; then
+    echo "Error: Missing required arguments."
+    print_help
+    exit 1
+fi
 
-DATE_CURRENT=$(date +%Y-%m-%d)
-
-LOCAL_DAILY=$(date -d "${SNAP_COUNT_LOCAL} days ago" +%Y-%m-%d)
-REMOTE_DAILY=$(date -d "${SNAP_COUNT_REMOTE} days ago" +%Y-%m-%d)
-
+# Exact timestamp format expected by the first script
+DATE_CURRENT=$(date +%Y-%m-%d_%H-%M-%S)
 HOSTNAME=$(hostname)
-
-# to E-mail report
 EMAIL="user@example.org"
 
-echo ========================================================================= | /usr/games/lolcat
-echo " Backup Started..                                            " `date "+%Y-%m-%d %H:%M:%S"` | /usr/games/lolcat
-echo " Subvol:" $SUBVOL | /usr/games/lolcat
-echo ========================================================================= | /usr/games/lolcat
-sync
-btrfs subvolume snapshot -r $SUBVOL $BACKUP_DIR_LOCAL/$DATE_CURRENT
+echo "========================================================================="
+echo " Backup Started..                                         $(date '+%Y-%m-%d %H:%M:%S')"
+echo " Subvol: $SUBVOL"
+echo "========================================================================="
 
-echo Delete older snapshot local..
-btrfs subvolume delete $BACKUP_DIR_LOCAL/$LOCAL_DAILY
+sync
+
+# Create new snapshot matching the target naming pattern
+btrfs subvolume snapshot -r "$SUBVOL" "$BACKUP_DIR_LOCAL/$DATE_CURRENT"
+
+echo "Checking for old snapshots to delete (Keep: $SNAP_COUNT_LOCAL)..."
+# List and sort snapshots matching the precise naming pattern
+CURRENT_SNAPS=$(ls -1d "$BACKUP_DIR_LOCAL"/[0-9]*-[0-9]*_[0-9]*-[0-9]*-[0-9]* 2>/dev/null | sort)
+SNAP_COUNT=$(echo "$CURRENT_SNAPS" | grep -c '^')
+
+if [ "$SNAP_COUNT" -gt "$SNAP_COUNT_LOCAL" ]; then
+    DIFF=$((SNAP_COUNT - SNAP_COUNT_LOCAL))
+    echo "$CURRENT_SNAPS" | head -n "$DIFF" | while read -r old_snap; do
+        echo "Deleting old snapshot: $old_snap"
+        btrfs subvolume delete "$old_snap"
+    done
+fi
 
 echo " "
 echo " - LOCAL Backups:"
-tree -a -d -L 1 $BACKUP_DIR_LOCAL | /usr/games/lolcat
+tree -a -d -L 1 "$BACKUP_DIR_LOCAL" | awk '
+  /directories/ {
+    snaps = $1 - 1;
+    print snaps " Snapshots"
+    next
+  }
+  { print }
+'
 echo " "
-echo _______________________________________________________________________________________________________________________ 
-echo
-echo " Backup End.                                                        " `date "+%Y-%m-%d %H:%M:%S"`
-echo " "
+echo "_______________________________________________________________________________________________________" 
+echo " Backup End.                                              $(date '+%Y-%m-%d %H:%M:%S')"
 echo " "
 
 # Send daily E-mail report
-#cat /var/log/btrlb.log | mail -s "BTRFS Snapshots and Replication daily E-Mail report." -a "From: $HOSTNAME@btrlb" $EMAIL
+#cat /var/log/btrlb_${LOG_DATE}.log | mail -s "BTRFS Snapshots and Replication daily E-Mail report." -a "From: $HOSTNAME@btrlb" $EMAIL
