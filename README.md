@@ -199,7 +199,7 @@ wget -O /usr/local/sbin/nagios-check_btrfsback-lite.sh https://raw.githubusercon
 ```
 
 ### Configure NRPE (or NCPA)
-Since the script needs read access to /root/btrfsback-lite.cfg and utilizes root SSH keys to inspect the remote storage target, append the following line to your /etc/nagios/nrpe.cfg to run it safely via sudo:
+Since the script needs read access to /etc/btrfsback-lite.cfg and utilizes root SSH keys to inspect the remote storage target, append the following line to your /etc/nagios/nrpe.cfg to run it safely via sudo:
 
 ```
 command[check_btrfs_backup]=/usr/bin/sudo /usr/local/sbin/nagios-check_btrfsback-lite.sh
