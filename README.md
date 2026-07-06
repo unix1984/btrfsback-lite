@@ -176,6 +176,27 @@ To view a specific backup run log:
 ```
 cat /var/log/btrfsback-lite-2026-06-03_01-00-01.log
 ```
+
+# Nagios / Icinga Plugin for btrfsback-lite
+
+A bulletproof Bash monitoring script designed to track the health and freshness of both local and remote BTRFS snapshots created by the `btrfsback-lite` backup framework.
+
+Instead of relying on filesystem modification times (which can be easily skewed by manual directory access or maintenance tasks), this plugin parses the actual date-based naming pattern (`YYYY-MM-DD_HH-MM-SS`) of the BTRFS snapshot subvolumes.
+
+## Features
+
+- **Automated Configuration Discovery:** Dynamically reads directories, remote targets, exclusions, and variables straight from your `/root/btrfsback-lite.cfg`.
+- **Comprehensive Scans:** Checks both **ROOTFS** and **every active LXD container** individually (automatically ignoring specified exclusions).
+- **Dual-Layer Protection:** Verifies snapshot presence and threshold age both on the local machine and the remote backup server via automated SSH checks.
+- **Detailed Output:** Displays precise snapshot stamps per container and component directly in Nagios, making troubleshooting a breeze.
+
+## Installation & Setup
+
+### 1. Download and Deploy the NAGIOS Plugin
+
+```
+wget -O /usr/local/sbin/nagios-check_btrfsback-lite.sh https://raw.githubusercontent.com/unix1984/btrfsback-lite/refs/heads/main/nagios-check_btrfsback-lite.sh && chmod +x /usr/local/sbin/nagios-check_btrfsback-lite.sh
+```
 <br></br>
 ## ↪️ Alternative Usage (No Config File)
 Alternatively, the **btrfsback-lite** script can be executed directly from the command line without using a configuration file. This approach is completely independent of LXD, allowing you to back up any arbitrary Btrfs subvolume individually:
