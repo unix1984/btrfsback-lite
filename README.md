@@ -222,7 +222,7 @@ define service {
 }
 ```
 
-###Threshold Rules
+### Threshold Rules
 The script applies standard scheduling assumptions tailored for daily setups:
 
 OK: Latest verified snapshot structure is younger than 26 hours.
